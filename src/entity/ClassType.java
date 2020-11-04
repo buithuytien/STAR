@@ -2,10 +2,10 @@ package entity;
 
 
 import enums.*;
+import utils.*;
 
 import java.time.LocalTime;
 import java.time.DayOfWeek;
-import java.time.format.DateTimeFormatter;
 import java.util.StringTokenizer;
 
 //import cache.Cache;
@@ -13,11 +13,11 @@ import util.DateTimeHelper;
 import util.TextDB;
 
 public class ClassType {
-	InstructionType type; // either lecture, tutorial, or lab.
+	private InstructionType type; // either lecture, tutorial, or lab.
 	private DayOfWeek day;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	String venue;
+	private String venue;
 	
 	
 	public ClassType(InstructionType type, DayOfWeek day, LocalTime starTime, LocalTime endTime, String venue) {
@@ -32,7 +32,7 @@ public class ClassType {
 	
 	public ClassType(String raw) {
 		// TODO: check date and time format.
-		// LECTURE MONDAY 10:00 13:00 LT12
+		// LEC MONDAY 10:00 13:00 LT12
 		StringTokenizer star = new StringTokenizer(raw, TextDB.SEPERATOR);
 		
 		String typeStr = star.nextToken().trim();
@@ -84,10 +84,13 @@ public class ClassType {
 		this.endTime = endTime;
 	}
 	
-	public boolean checkClash(ClassType classtype) {
+	public boolean checkClash(ClassType c) {
 		// TODO: check if 2 classes clash by comparing time and day in the week.
+		
 		return true;
 	}
+
+	
 	
 	
 	

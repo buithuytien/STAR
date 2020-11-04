@@ -1,4 +1,4 @@
-package util;
+package utils;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -19,7 +19,7 @@ public class DateTimeHelper {
 	 * method to declare strings in a particular format
 	 */
 	public static final String DATE_FORMAT="d-MM-yyyy";
-	public static final String TIME_FORMAT="HH-mm";
+	public static final String TIME_FORMAT="HH:mm";
 	public static final String TRANSACTION_DATE_FORMAT="yyyyMMd";
 	public static final String TRANSACTION_TIME_FORMAT="HHmm";
 	

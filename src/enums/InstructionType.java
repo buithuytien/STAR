@@ -1,7 +1,7 @@
 package enums;
 
 public enum InstructionType {
-	LECTURE("Lecture"), TUT("Tutorial"), LAB("Laboratory");
+	LEC("Lecture"), TUT("Tutorial"), LAB("Laboratory");
 	
 	private String nameStr;
 	

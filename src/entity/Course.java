@@ -18,17 +18,41 @@ public class Course {
 	/*
 	 * TODO: get and set methods
 	 */
-	
-	/*
-	 *  TODO: get total vacancy and class size from its indices
-	 */
 	public int getTotalSize() {
 		return 0;
 	}
 	
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
+	}
+
+	public String getSchoolCode() {
+		return schoolCode;
+	}
+
+	public void setSchoolCode(String schoolCode) {
+		this.schoolCode = schoolCode;
+	}
+
+	public ArrayList<CourseIndex> getCourseIndexList() {
+		return courseIndexList;
+	}
+
+	public void setCourseIndexList(ArrayList<CourseIndex> courseIndexList) {
+		this.courseIndexList = courseIndexList;
+	}
+
 	public int getTotalVacancy() {
 		return 0;
 	}
+	/*
+	 *  TODO: get total vacancy and class size from its indices
+	 */
+	
 	
 	/*
 	 *  TODO: add and remove course index
