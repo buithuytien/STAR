@@ -2,15 +2,11 @@ package entity;
 
 
 import enums.*;
-import utils.*;
+import util.*;
 
 import java.time.LocalTime;
 import java.time.DayOfWeek;
 import java.util.StringTokenizer;
-
-//import cache.Cache;
-import util.DateTimeHelper;
-import util.TextDB;
 
 public class ClassType {
 	private InstructionType type; // either lecture, tutorial, or lab.
@@ -33,7 +29,7 @@ public class ClassType {
 	public ClassType(String raw) {
 		// TODO: check date and time format.
 		// LEC MONDAY 10:00 13:00 LT12
-		StringTokenizer star = new StringTokenizer(raw, TextDB.SEPERATOR);
+		StringTokenizer star = new StringTokenizer(raw, " ");
 		
 		String typeStr = star.nextToken().trim();
 		String dayStr = star.nextToken().trim();
@@ -43,8 +39,20 @@ public class ClassType {
 		
 		this.type = InstructionType.valueOf(typeStr);
 		this.day = DayOfWeek.valueOf(dayStr);
-		this.setStartTime(DateTimeHelper.convertStringToTime(startTimeStr));	
+		this.setStartTime(DateTimeHelper.convertStringToTime(startTimeStr));	// DateTimeHelper class from utils
 		this.setEndTime(DateTimeHelper.convertStringToTime(endTimeStr));	
+		
+	}
+	
+	public String toString() {
+		// concatenate all information, get separated by ";"
+		// eg. LEC MONDAY 10:00 13:00 LT12
+		String temp;
+		temp = this.type.name() + " " + this.day.name() + " " +
+				DateTimeHelper.convertTimeToString(this.startTime) + " " + 
+				DateTimeHelper.convertTimeToString(this.endTime) + " " + 
+				this.venue ;
+		return temp;
 		
 	}
 	

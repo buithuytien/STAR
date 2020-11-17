@@ -1,0 +1,20 @@
+Testing_Names,Name,Matric Number,Password,Faculty,Gender,Nationality,Phone Number,Email,Year of Study,Date Time Start,Date Time End
+A,Abby,U123456A,2096458537,Math,F,SG,98431241,Abby@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+S,Betty,U123456B,-1426809503,Math,F,MYR,98431241,Betty@e.ntu.edu.sg,3,3/10/2020 8:00,6/10/2020 20:10
+A,Carol,U123456C,-1397226047,Math,F,IND,98431241,Carol@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+S,Debbie,U123456D,-1367642591,Math,F,MYR,98431241,Debbie@e.ntu.edu.sg,3,3/10/2020 8:00,6/10/2020 20:10
+A,Eddie,U123456E,-1338059135,Math,M,SG,98431241,Eddie@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+S,Francis,U123456F,-1308475679,Math,M,SG,98431241,Francis@e.ntu.edu.sg,2,3/10/2020 8:00,6/10/2020 20:10
+A,Gabriel,U123456G,-1278892223,Math,M,SG,98431241,Gabriel@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+S,Henry,U123456H,-1249308767,Math,M,SG,98431241,Henry@e.ntu.edu.sg,2,3/10/2020 8:00,6/10/2020 20:10
+A,Issac,U123456I,-1219725311,Math,M,SG,98431241,Issac@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+S,Jimmy,U123456J,-1190141855,Math,M,MY,98431241,Jimmy@e.ntu.edu.sg,1,3/10/2020 8:00,6/10/2020 20:10
+A,Kelly,U123456K,-1160558399,Math,F,MY,98431241,Kelly@e.ntu.edu.sg,,3/10/2020 8:00,6/10/2020 20:10
+User Type,Name,Matric Number,Password,Faculty,Gender,Nationality,Phone Number,Email,Year of Study,Date Time Start,Date Time End
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15
+User Type,Name,Matric Number,Password,Faculty,Gender,Nationality,Phone Number,Email,Year of Study,Date Time Start,Date Time End
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15
+Nathan,U123456K,kkkkk,Math,2020-10-03 08:00:00,2020-10-06 20:10:15

@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
