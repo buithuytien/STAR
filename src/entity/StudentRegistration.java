@@ -72,7 +72,7 @@ public class StudentRegistration {
 		return ci;
 	}
 	
-	public String[] setCourseRow(CourseIndex ci) {
+	public String[] setCourseRow(CourseIndex ci) { // ADJUSTED BY THUYTIEN
 		String[] details = new String[9];
 		details[0] = ci.getIndex();
 		details[1] = ci.getCourseCode();
@@ -87,6 +87,7 @@ public class StudentRegistration {
 		details[6] = String.valueOf(ci.getCourseType());
 		details[7] = ci.getGERType();
 		details[8] = String.valueOf(ci.getIndexAU());
+		details[9] = ci.toStringClassList(); // return LEC MONDAY 10:00 13:00 LT12; TUT MONDAY 9:00 10:00 TR101	// ADDED BY THUYTIEN
 		return details;
 	}
 	
