@@ -195,7 +195,7 @@ public class Database {
 			System.out.println("File Error.");
 			e.printStackTrace();
 			}
-		System.out.println("Course Index not found");
+		System.out.println("findAllRecord cannot find id requested");
 		return null;
 	}
 	
@@ -414,7 +414,7 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[0].equals(course_index)) {
-			    	System.out.println("Course Index Found");
+//			    	System.out.println("Course Index Found");
 			    	return i;
 			    }
 			    i++;

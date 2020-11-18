@@ -95,6 +95,21 @@ public class CourseManager {
 			return -1;
 		}
 	}
+	
+	public int returnIndexVacancy(String index) {
+		db.setFilename("Course");
+		int index_line = db.findCourseIndexRecord(index, "Course");
+		if(index_line < 0) { // course index not found
+			System.out.println("Course index not found in database. Please create one or try again!");
+			return -1;
+		} 
+		// if index exists, create a course index object, and edit vacancy, then save to file. If no, do nothing, return 0;
+		// course index found at line index_line
+		CourseIndex ci = getCourseIndexObj(index);
+		int vacancy = ci.getVacancy();
+		System.out.println("Index " + index + " has " + vacancy + " vacancies");
+		return vacancy;
+	}
 
 	
 	public void addIndex2ExistingCourse(CourseIndex ci) { // add a new course index to existing course 

@@ -338,7 +338,23 @@ public class AdminApp {
 					break;
 				}
 			case 5: // Check vacancy based on index number
+				// verify if this index number exists.
+				index = null;		
+				
 				// verify if this index number exists. If exists return null and do nothing;	
+				do {
+					Scanner sc1 = new Scanner(System.in);
+					System.out.print("Enter an index number: ");
+					index = sc1.next();
+					boolean courseIndexExist  = cm.checkCourseIndexExist(index);
+					if(!courseIndexExist) {
+//						throw new ErrorException("recordFound");
+						index = null;
+						System.out.println("ERROR: Course index NOT found. Please try again"); // or press Enter to return.
+					}
+				} while(index == null);
+				
+				int vacancy = cm.returnIndexVacancy(index);
 				
 				break;
 				
