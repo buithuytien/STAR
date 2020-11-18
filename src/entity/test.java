@@ -11,9 +11,12 @@ import util.DateTimeHelper;
 import util.TextDB;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -77,9 +80,8 @@ public class test {
 //		 }
 //		 db.updateFile(1, 1, "test11");
 		 
-//		 AdminApp a = new AdminApp();
-//		 a.printAdminMenu();	
-		 
+
+//		 
 //		 Scanner sc = new Scanner(System.in);
 //		 Course course = new Course("AA1111");
 //		 System.out.print("Enter school code ");
@@ -106,8 +108,49 @@ public class test {
 //				System.out.println(courseDB[i]  + "  ");
 //			}		
 		 
-		 StarsLogin login = new StarsLogin();
+//		 DBObj dbo = new DBObj();
+//		 Scanner sc = new Scanner(System.in);
+//		 System.out.print("Enter matric: ");
+//		 String matric = sc.next();
+//
+//		 try {
+//			 Student stud = dbo.getStudentObj(matric);
+//			 System.out.println(stud.getStartTime() );
+//		 } catch (ParseException e) {
+//			 // TODO Auto-generated catch block
+//			 e.printStackTrace();
+//		 }
+//		 
+//		 InstructionType type = InstructionType.valueOf("lec");
 		 
+//		 CourseIndex ci = AdminApp.printNewIndexMenu();
+//		 System.out.println(ci.getClassList().get(0).toString() );
+//		 System.out.println(ci.getClassList().get(0).getStartTime() );
+//		 System.out.println(ci.getClassList().get(0).getEndTime() );
+		 
+		 Faculty s = new Faculty();
+		 s.setFaculty("math");
+		 System.out.println(s.getFaculty());
+
+		 DBObj dbo = new DBObj();	
+		 Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\", "Users");
+		 int i = db.findRecord("U123456B", "Users", 2);
+		 System.out.println("i = " + i);
+		 
+//		 ClassType ct = new ClassType("LEC MONDAY 10:00:00 13:00 LT12");
+		 
+		 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //
+		 Date aa = null;
+		 try {
+			 aa = dateFormat.parse("19/11/20 08:08:08");
+		 } catch (ParseException e) {
+			 // TODO Auto-generated catch block
+			 e.printStackTrace();
+		 }
+		 System.out.println(aa);
+		 
+		 AdminApp a = new AdminApp();
+		 a.printAdminMenu();
 
 	}
 

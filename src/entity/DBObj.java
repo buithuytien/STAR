@@ -11,34 +11,40 @@ import util.*;
 
 public class DBObj {
 	SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");	
-	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy HH:mm:ss");
+//	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy HH:mm:ss");
+	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	Database dUser = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	Database dIndex = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	Database dInfo = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	
 	public DBObj() {}
 	
-	public Student getStudentObj(String matric) throws ParseException {
+	// ADJUSTED BY THUYTIEN
+	public Student getStudentObj(String matric) throws ParseException, ErrorException {
 		dUser.setFilename("Users");
 		String[] details = dUser.getUserRecord(matric);
-		Student s = new Student(matric);
-		s.setStudName(details[1]);
-		s.setStudMat(details[2]);
-		s.setPassword(details[3]);
-		s.setFaculty(details[4]);
-		s.setStudGender(details[5].charAt(0));
-		s.setStudNat(details[6]);
-		s.setStudNum(Integer.parseInt(details[7]));
-		s.setStudEmail(details[8]);
-		s.setStudYear(Integer.parseInt(details[9]));
-		s.setStartTime(dateFormat.parse(details[10]));
-		s.setEndTime(dateFormat.parse(details[11]));	
-		return s;
+		if(details.length == 0) {   // ADJUSTED BY THUYTIEN
+			throw new ErrorException("recordNotFound"); 
+		} else {
+			Student s = new Student(matric);
+			s.setStudName(details[1]);
+			s.setStudMat(details[2]);
+			s.setPassword(details[3]);
+			s.setFaculty(details[4]);
+			s.setStudGender(details[5].charAt(0));
+			s.setStudNat(details[6]);
+			s.setStudNum(Integer.parseInt(details[7]));
+			s.setStudEmail(details[8]);
+			s.setStudYear(Integer.parseInt(details[9]));
+			s.setStartTime(dateFormat.parse(details[10]));
+			s.setEndTime(dateFormat.parse(details[11]));	
+			return s;
+		}		
 	}
 	
 	public String[] setStudentRow(Student s) { //usually folo by similarcode to update to db: dUsers.updateCourseInfo(index, setStudentRow(s));
 		String[] details = new String[12];
-		details[0] = s.getStudMat();
+		details[0] = "S"; // s.getStudMat();
 		details[1] = s.getStudName();
 		details[2] = s.getStudMat();
 		details[3] = s.getPassword();

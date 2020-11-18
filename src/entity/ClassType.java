@@ -15,6 +15,7 @@ public class ClassType {
 	private LocalTime endTime;
 	private String venue;
 	
+	public ClassType() {}
 	
 	public ClassType(InstructionType type, DayOfWeek day, LocalTime starTime, LocalTime endTime, String venue) {
 		// check if start time > end time:
@@ -35,12 +36,12 @@ public class ClassType {
 		String dayStr = star.nextToken().trim();
 		String startTimeStr = star.nextToken().trim();
 		String endTimeStr = star.nextToken().trim();
-		this.venue = star.nextToken().trim();		
 		
+		this.venue = star.nextToken().trim();
 		this.type = InstructionType.valueOf(typeStr);
 		this.day = DayOfWeek.valueOf(dayStr);
-		this.setStartTime(DateTimeHelper.convertStringToTime(startTimeStr));	// DateTimeHelper class from utils
-		this.setEndTime(DateTimeHelper.convertStringToTime(endTimeStr));	
+		this.setStartTime(TimeHelper.convertStringToTime(startTimeStr));	// DateTimeHelper class from utils
+		this.setEndTime(TimeHelper.convertStringToTime(endTimeStr));	
 		
 	}
 	
@@ -49,8 +50,8 @@ public class ClassType {
 		// eg. LEC MONDAY 10:00 13:00 LT12
 		String temp;
 		temp = this.type.name() + " " + this.day.name() + " " +
-				DateTimeHelper.convertTimeToString(this.startTime) + " " + 
-				DateTimeHelper.convertTimeToString(this.endTime) + " " + 
+				TimeHelper.convertTimeToString(this.startTime) + " " + 
+				TimeHelper.convertTimeToString(this.endTime) + " " + 
 				this.venue ;
 		return temp;
 		
@@ -66,7 +67,7 @@ public class ClassType {
 	public DayOfWeek getDay() {
 		return this.day;
 	}
-	public void setDate(DayOfWeek day) {
+	public void setDay(DayOfWeek day) {
 		this.day = day;
 	}
 	public String getVenue() {
@@ -83,6 +84,7 @@ public class ClassType {
 	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
+	
 
 	public LocalTime getEndTime() {
 		return endTime;

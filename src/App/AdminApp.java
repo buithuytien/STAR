@@ -1,6 +1,10 @@
 package App;
 
 import java.io.*;
+import java.text.ParseException;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import CRUD.*;
@@ -13,7 +17,9 @@ public class AdminApp {
 		Scanner sc = new Scanner(System.in);
 		int subMenuOption = 0, subMenuOption2 = 0;
 		CourseManager cm = new CourseManager();
+		StudentManager sm = new StudentManager();
 		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		DBObj dbo = new DBObj();	
 		boolean repeat;
 		
 		do{
@@ -47,26 +53,106 @@ public class AdminApp {
 			System.out.println("");
 			
 			String studMatric = null, courseCode = null, index = null;
+			String startTime = null, endTime = null;
+			Date startReg, endReg;
 			switch(subMenuOption){
-			case 1:
-				
+			case 1: // 1 Edit student access period				
 				do{
-					try{
-						System.out.print("Enter student matric number to edit access period: ");
-						studMatric = sc.next();
-						// TODO: edit student access period
+					System.out.print("Enter student matric number to edit access period: ");
+					studMatric = sc.next();					
+					try {
+						Student stud = dbo.getStudentObj(studMatric);
+						
+						do {
+							Scanner sc2 = new Scanner(System.in);
+							System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
+							startTime = sc2.nextLine();
+							startReg = TimeHelper.GetStudentDateTime(startTime);
+							if(startReg == null) {
+								startTime = null; // to return the loop
+							}
+						} while (startTime == null);
+						
+						do {
+							Scanner sc2 = new Scanner(System.in);
+							System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
+							endTime = sc2.nextLine();
+							endReg = TimeHelper.GetStudentDateTime(endTime);
+							if(endReg == null) {
+								endTime = null; // to return the loop
+							}
+						} while (endTime == null);
+
+						sm.changeAccessPeriod(stud, startReg, endReg);
+
+						
+					} catch (ParseException e1) {
+//						e1.printStackTrace();
+						System.out.println("ERROR: Incorrect date time format");
+						startTime = null;
+					} catch (ErrorException e2) { // custom exception from dbo.getStudentObj
+//						e2.printStackTrace();
+						System.out.println("Please try again");
+						studMatric = null;
 					}
-					catch(InputMismatchException e){
-						System.out.println("Please enter a valid index number");
-						sc.nextLine();
-						System.out.println("");
-					}
-				} while(studMatric == null);
+					
+				} while(studMatric == null || startTime == null);
 
 				break;
 				
-			case 2:
+			case 2: // Add student
 				// TODO
+				studMatric = null;
+				do {
+					System.out.print("Enter student matric number to create: ");
+					studMatric = sc.next();
+					int temp = db.findRecord(studMatric, "Users", 2);
+					if(temp > 0) { //  record found
+						System.out.println("Student matric already exists. Please try again");
+						studMatric = null;
+					}					
+				} while(studMatric == null);
+				
+				// asking for other details
+				String name, faculty, nat; //email, startTime, endTime - auto generated
+				int year, phone;				
+				char gender;
+				
+				System.out.print("Enter student name ");
+				name = sc.next();
+				System.out.print("Enter student gender ");
+				gender = sc.next().charAt(0);
+				System.out.print("Enter faculty (eg. Math) ");
+				faculty = sc.next();
+				System.out.print("Enter year of study ");
+				year = sc.nextInt();
+				System.out.print("Enter nationality (eg. SG) ");
+				nat = sc.next();
+				System.out.print("Enter phone number ");
+				phone = sc.nextInt();	
+				
+				do {
+					Scanner sc2 = new Scanner(System.in);
+					System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
+					startTime = sc2.nextLine();
+					startReg = TimeHelper.GetStudentDateTime(startTime);
+					if(startReg == null) {
+						startTime = null; // to return the loop
+					}
+				} while (startTime == null);
+				
+				do {
+					Scanner sc2 = new Scanner(System.in);
+					System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
+					endTime = sc2.nextLine();
+					endReg = TimeHelper.GetStudentDateTime(endTime);
+					if(endReg == null) {
+						endTime = null; // to return the loop
+					}
+				} while (endTime == null);
+				sm.createNewStudent(name, studMatric, gender, faculty, nat, phone, year, startReg, endReg);
+				//createNewStudent(String name, String matric, char gender, String faculty, String nationality, int phone, int year, Date startReg, Date endReg)
+				
 				break;
 				
 			case 3: // Add a new course
@@ -238,7 +324,7 @@ public class AdminApp {
 					index = sc.next();
 					boolean courseIndexExist  = cm.checkCourseIndexExist(index);
 					if(!courseIndexExist) {
-						System.out.println("Course index not existed. Please try again"); // or press Enter to return.
+						System.out.println("ERROR: Course index not existed. Please try again"); // or press Enter to return.
 					} else {
 						repeat = false;
 					}
@@ -253,7 +339,7 @@ public class AdminApp {
 					courseCode = sc.next();
 					boolean courseCodeExist  = cm.checkCourseCodeExist(courseCode);
 					if(!courseCodeExist) {
-						System.out.println("Course code not existed. Please try again"); // or press Enter to return.
+						System.out.println("ERROR: Course code not existed. Please try again"); // or press Enter to return.
 					} else {
 						repeat = false;
 					}
@@ -275,26 +361,25 @@ public class AdminApp {
 	// create method for creating course index information: sessions details, enter index code, check if index exists, then not allow; arg: couseCode, index
 	// use for create a new index in 1 course, and create a 
 	// finished as new course saved to database
-	public static CourseIndex printNewIndexMenu() {
+	public static CourseIndex printNewIndexMenu() { //throws ErrorException 
 		// return a partial courseIndex object. other information added later: group number, coursetype, GERPE type, aus
 		// then convert to string, then call db method to save.
 		Scanner sc = new Scanner(System.in);
 		CourseManager cm = new CourseManager();
-		String index = null;
-		
+		String index = null;		
 		
 		// verify if this index number exists. If exists return null and do nothing;	
-		boolean repeat = true;
-		while(repeat) {
+		do {
+			Scanner sc1 = new Scanner(System.in);
 			System.out.print("Enter a new index number: ");
-			index = sc.next();
+			index = sc1.next();
 			boolean courseIndexExist  = cm.checkCourseIndexExist(index);
 			if(courseIndexExist) {
-				System.out.println("Course index already existed. Please try again"); // or press Enter to return.
-			} else {
-				repeat = false;
+//				throw new ErrorException("recordFound");
+				index = null;
+				System.out.println("ERROR: Course index already existed. Please try again"); // or press Enter to return.
 			}
-		}
+		} while(index == null);
 		
 		CourseIndex ci = new CourseIndex(index);
 		System.out.print("Please enter group number in " + index + ": ");
@@ -311,14 +396,78 @@ public class AdminApp {
 //		String[] classListRaw = new String[n_session];
 		ArrayList<ClassType> classTypes = new ArrayList<ClassType>();
 //		ClassType [] classTypes = new ClassType[n_session];
+		String typeStr = null, dayStr = null, startTimeStr = null, endTimeStr = null, venue;
 		for(int i = 0 ; i < n_session; i++) {
 			// TODO:  add check pattern here if have time
+			
+//			System.out.println("Enter session info with the following format");
+//			System.out.println("CLASS_TYPE DAY START_TIME(hh:mm) END_TIME(hh:mm) VENUE. EXAMPLE:");
+//			System.out.println("LAB TUESDAY 09:00 11:00 SCELAB1");
+//			String session_info = sc2.nextLine();
+//			ClassType ct = new ClassType(session_info);
+			
+			ClassType ct = new ClassType();
+			do {
+				Scanner sc2 = new Scanner(System.in);
+				System.out.println("Enter class type. Only accept either {LEC, TUT, LAB}");
+				typeStr = sc2.next();
+				try {
+					InstructionType type = InstructionType.valueOf(typeStr);
+					ct.setType(type);
+				} catch (IllegalArgumentException e) {
+					typeStr = null;
+					System.out.println("ERROR: Incorrect class type format. Please try again");
+//					e.printStackTrace();
+				}
+			} while (typeStr == null);
+			
+			do {
+				Scanner sc2 = new Scanner(System.in);
+				System.out.println("Enter weekday of class. Only accept either {MONDAY, TUESDAY, ...}");
+				dayStr = sc2.next();
+				try {
+					DayOfWeek day = DayOfWeek.valueOf(dayStr);
+					ct.setDay(day);
+				} catch (IllegalArgumentException e) {
+					dayStr = null;
+					System.out.println("ERROR: Incorrect day of week format. Please try again");
+//					e.printStackTrace();
+				}
+			} while (dayStr == null);
+			
+			do {
+				Scanner sc2 = new Scanner(System.in);
+				System.out.println("Enter start time of class in for mat HH:mm");
+				startTimeStr = sc2.next();
+				try {
+					LocalTime startTime = TimeHelper.convertStringToTime(startTimeStr);
+					ct.setStartTime(startTime);
+				} catch (DateTimeParseException e) {
+					startTimeStr = null;
+					System.out.println("ERROR: Incorrect time format. Please try again");
+//					e.printStackTrace();
+				}
+			} while (startTimeStr == null);
+			
+			do {
+				Scanner sc2 = new Scanner(System.in);
+				System.out.println("Enter end time of class in for mat HH:mm");
+				endTimeStr = sc2.next();
+				try {
+					LocalTime endTime = TimeHelper.convertStringToTime(endTimeStr);
+					ct.setEndTime(endTime);
+				} catch (DateTimeParseException e) {
+					endTimeStr = null;
+					System.out.println("ERROR: Incorrect time format. Please try again");
+//					e.printStackTrace();
+				}
+			} while (endTimeStr == null);
+			
 			Scanner sc2 = new Scanner(System.in);
-			System.out.println("Enter session info with the following format");
-			System.out.println("CLASS_TYPE DAY START_TIME(hh:mm) END_TIME(hh:mm) VENUE. EXAMPLE:");
-			System.out.println("LAB TUESDAY 09:00 11:00 SCELAB1");
-			String session_info = sc2.nextLine();
-			ClassType ct = new ClassType(session_info);
+			System.out.println("Enter venue");
+			venue = sc2.next();
+			ct.setVenue(venue);
+			
 			classTypes.add(ct);
 			if(i == n_session-1) { // final loop
 //				sc2.close();

@@ -48,6 +48,8 @@ public class StarsLogin {
 				sc.nextLine();
 			}
 			catch(ErrorException e){
+//				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 			
 			System.out.println("");

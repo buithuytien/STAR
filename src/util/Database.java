@@ -56,7 +56,7 @@ public class Database {
 		appendFile(rows, this.filename);
 	}
 	
-	public void updateFile(int i,int j, String updateString){ // WROTE BY YIKSIANG
+	public void updateFile(int i, int j, String updateString){ // WROTE BY YIKSIANG
 		try {
 			// First we read in the whole file first
 			BufferedReader br = new BufferedReader(new FileReader(this.filepath + this.filename + ".csv"));
@@ -72,11 +72,11 @@ public class Database {
 			
 			// if i > number of rows in file, throw an error
 			if(i > lines.size() - 1) { //  error handling
-				System.out.println("row to edit exceeds number of current rows in file");
+				System.out.println("row or column to edit exceeds number of current rows in file");
 //				return;
 			}
 			if(j > lines.size() - 1) { //  error handling
-				System.out.println("row to edit exceeds number of current rows in file");
+				System.out.println("row or column to edit exceeds number of current rows in file");
 //				return;
 			}
 			
@@ -114,7 +114,7 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[colNum].equals(id)) {
-			    	System.out.println("Record Found in " + filename + ".csv at column" + colNum);
+//			    	System.out.println("Record Found in " + filename + ".csv at column" + colNum);
 			    	return data;
 			    }
 			}
@@ -138,7 +138,7 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[colNum].equals(id)) {
-			    	System.out.println("Record Found");
+//			    	System.out.println("Record Found");
 			    	return i;
 			    }
 			    i++;
@@ -147,7 +147,7 @@ public class Database {
 			System.out.println("File Error.");
 			e.printStackTrace();
 			}
-		System.out.println("Course Index not found");
+//		System.out.println("Course Index not found");
 		return -1;
 	}
 	
