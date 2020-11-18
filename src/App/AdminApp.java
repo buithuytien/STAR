@@ -306,9 +306,24 @@ public class AdminApp {
 					cm.addIndex2ExistingCourse(ci);					
 					break;
 					
-				case 4: // update vacancy of its index
-					System.out.print("Enter the index number to update vacancy: ");
-					index = sc.next();
+				case 4: // update vacancy of its index					
+					ArrayList<String> strIndex = db.returnIndexRecord(courseCode, 1);
+					System.out.println("Existing index number in course " +  courseCode + " : ");
+					for(int i = 0; i < strIndex.size(); i++) {
+						System.out.print(strIndex.get(i) + "  ");
+					}					
+//					System.out.println(" ");
+					index = null;
+					do {
+						System.out.print("\nEnter the index number to update vacancy: ");
+						index = sc.next();
+						if(! strIndex.contains(index)) {
+							System.out.println("ERROR: Invalid index entry. Please try again");
+							index = null;
+						}
+					} while (index == null);
+						
+					
 					System.out.print("Enter new vacancy to update: ");
 					int vacancy = sc.nextInt();
 					int editVacancy  = -1; // unsucessful update
