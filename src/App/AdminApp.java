@@ -54,7 +54,7 @@ public class AdminApp {
 			
 			String studMatric = null, courseCode = null, index = null;
 			String startTime = null, endTime = null;
-			Date startReg, endReg;
+			Date startReg = null, endReg = null;
 			switch(subMenuOption){
 			case 1: // 1 Edit student access period				
 				do{
@@ -67,9 +67,12 @@ public class AdminApp {
 							Scanner sc2 = new Scanner(System.in);
 							System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
 							startTime = sc2.nextLine();
-							startReg = TimeHelper.GetStudentDateTime(startTime);
-							if(startReg == null) {
-								startTime = null; // to return the loop
+							try {
+								startReg = TimeHelper.GetStudentDateTime(startTime);
+							} catch (ParseException e) {
+								// TODO Auto-generated catch block
+								System.out.println("ERROR: Incorrect date time format");
+								startTime = null;
 							}
 						} while (startTime == null);
 						
@@ -77,9 +80,11 @@ public class AdminApp {
 							Scanner sc2 = new Scanner(System.in);
 							System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
 							endTime = sc2.nextLine();
-							endReg = TimeHelper.GetStudentDateTime(endTime);
-							if(endReg == null) {
-								endTime = null; // to return the loop
+							try {
+								endReg = TimeHelper.GetStudentDateTime(endTime);
+							} catch (ParseException e) {
+								System.out.println("ERROR: Incorrect date time format");
+								endTime = null;
 							}
 						} while (endTime == null);
 
@@ -135,9 +140,12 @@ public class AdminApp {
 					Scanner sc2 = new Scanner(System.in);
 					System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
 					startTime = sc2.nextLine();
-					startReg = TimeHelper.GetStudentDateTime(startTime);
-					if(startReg == null) {
-						startTime = null; // to return the loop
+					try {
+						startReg = TimeHelper.GetStudentDateTime(startTime);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						System.out.println("ERROR: Incorrect date time format");
+						startTime = null;
 					}
 				} while (startTime == null);
 				
@@ -145,9 +153,11 @@ public class AdminApp {
 					Scanner sc2 = new Scanner(System.in);
 					System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
 					endTime = sc2.nextLine();
-					endReg = TimeHelper.GetStudentDateTime(endTime);
-					if(endReg == null) {
-						endTime = null; // to return the loop
+					try {
+						endReg = TimeHelper.GetStudentDateTime(endTime);
+					} catch (ParseException e) {
+						System.out.println("ERROR: Incorrect date time format");
+						endTime = null;
 					}
 				} while (endTime == null);
 				sm.createNewStudent(name, studMatric, gender, faculty, nat, phone, year, startReg, endReg);

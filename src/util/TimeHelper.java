@@ -15,16 +15,17 @@ public class TimeHelper {
 	
 	public static final String TIME_FORMAT="HH:mm"; 
 	
-	public static Date GetStudentDateTime(String strDateTime) {
+	public static Date GetStudentDateTime(String strDateTime) throws ParseException {
 		// use to check student registration date time
 		Date temp = null;
-		 try {
-			temp = dateFormat.parse(strDateTime);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("ERROR: Incorrect date time format.");
-		}
+		temp = dateFormat.parse(strDateTime);
+//		 try {
+//			temp = dateFormat.parse(strDateTime);
+//		} catch (ParseException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			System.out.println("ERROR: Incorrect date time format.");
+//		}
 		return temp;
 	}
 	
