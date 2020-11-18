@@ -12,9 +12,9 @@ import util.*;
 public class DBObj {
 	SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");	
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy HH:mm:ss");
-	Database dUser = new Database("C:\\");
-	Database dIndex = new Database("C:\\");
-	Database dInfo = new Database("C:\\");
+	Database dUser = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+	Database dIndex = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+	Database dInfo = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	
 	public DBObj() {}
 	
@@ -73,8 +73,8 @@ public class DBObj {
 		ci.setCourseType(details[6]);
 		ci.setGERType(details[7]);
 		ci.setIndexAU(Integer.parseInt(details[8]));
-		//read in {"LEC MONDAY 10:00 13:00 LT12"; "TUT MONDAY 9:00 10:00 TR101"}
-		ci.setClassList(details[9].split(";")); // ADDED BY THUYTIEN
+		//read in String[] {"LEC MONDAY 10:00 13:00 LT12"; "TUT MONDAY 9:00 10:00 TR101"}
+		ci.setClassList(details[9].split(";")); // ADDED BY THUYTIEN // array of String
 		return ci;
 	}
 	

@@ -4,7 +4,8 @@ import util.*;
 public class Authentication {
 	private String userID;
 	private String password;
-	private Database d = new Database("C:\\");
+	private Database d = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+//	private Database d = new Database("C:\\");
 	
 	public Authentication() {
 		this.userID = "default";

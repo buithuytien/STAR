@@ -12,8 +12,8 @@ public class StudentRegistration {
 
 	SimpleDateFormat timeFormat = new SimpleDateFormat("HHmm");	
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy HH:mm:ss");
-	Database dUser = new Database("C:\\");
-	Database dIndex = new Database("C:\\");
+	Database dUser = new Database(System.getProperty("user.dir") + "\\src\\database\\"); // "C:\\"
+	Database dIndex = new Database(System.getProperty("user.dir") + "\\src\\database\\"); // "C:\\"
 	
 	public Student getStudentObj(String matric) throws ParseException {
 		dUser.setFilename("Users");

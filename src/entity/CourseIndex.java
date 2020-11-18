@@ -8,7 +8,7 @@ public class CourseIndex {
 	private String courseCode;
 	private int indexAU;
 	private int grpNum;
-	private InstructionCourseType courseType; // CORE, UE,...
+	private InstructionCourseType courseType; // CORE, UE,... // string
 	private String GERType;
 	private int vacancy;
 	private int totalSize;

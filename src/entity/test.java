@@ -2,6 +2,7 @@ package entity;
 import java.util.StringTokenizer;
 
 import App.AdminApp;
+import App.StarsLogin;
 import App.StudentApp;
 import CRUD.CourseManager;
 import enums.*;
@@ -76,8 +77,8 @@ public class test {
 //		 }
 //		 db.updateFile(1, 1, "test11");
 		 
-		 AdminApp a = new AdminApp();
-		 a.printAdminMenu();	
+//		 AdminApp a = new AdminApp();
+//		 a.printAdminMenu();	
 		 
 //		 Scanner sc = new Scanner(System.in);
 //		 Course course = new Course("AA1111");
@@ -104,6 +105,9 @@ public class test {
 //			for(int i = 0; i < courseDB.length; i ++) {
 //				System.out.println(courseDB[i]  + "  ");
 //			}		
+		 
+		 StarsLogin login = new StarsLogin();
+		 
 
 	}
 
