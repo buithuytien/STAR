@@ -28,11 +28,11 @@ public class Database {
 	}
 
 	
-	public void appendFile(String[] rows, String filename) {
+	public void appendFile(String[] rows, String filename) { // ADDED BY THUYTIEN, OVERLOAD THE PREVIOUS appendFile
 		try {
 			 // This allows us to append to the csv file without overwriting it
 			this.filename = filename;
-			pw = new FileWriter(this.filepath + this.filename + ".csv", true);
+			pw = new FileWriter(this.filepath + this.filename + ".csv", true); // ADDED BY THUYTIEN
 			for (int i = 0; i<rows.length;i++) {
 			    if (i != rows.length -1) {
 			    	//System.out.println(rows[i]);
@@ -52,11 +52,11 @@ public class Database {
 		}		
 	}
 	
-	public void appendFile(String[] rows) {
+	public void appendFile(String[] rows) { 
 		appendFile(rows, this.filename);
 	}
 	
-	public void updateFile(int i,int j, String updateString){
+	public void updateFile(int i,int j, String updateString){ // WROTE BY YIKSIANG
 		try {
 			// First we read in the whole file first
 			BufferedReader br = new BufferedReader(new FileReader(this.filepath + this.filename + ".csv"));
@@ -103,7 +103,7 @@ public class Database {
 		}
 	}
 	
-	public String[] getRecord(String id, String filename, int colNum) {
+	public String[] getRecord(String id, String filename, int colNum) {  // ADDED BY THUYTIEN
 		// find record in any file name at column number colNum; only return the first row found.
 		this.filename = filename;
 		String[] data;
@@ -126,7 +126,7 @@ public class Database {
 		return new String[0];
 	}
 	
-	public int findRecord(String id, String filename, int colNum) {
+	public int findRecord(String id, String filename, int colNum) {   // ADDED BY THUYTIEN
 		// find record in any file name at column number colNum; only return the first row found.
 		int i = 0;
 		this.filename = filename;
@@ -151,18 +151,18 @@ public class Database {
 		return -1;
 	}
 	
-	public int findRecord(String id, String filename) {
+	public int findRecord(String id, String filename) {  // ADDED BY THUYTIEN
 		// find record in any file name; only return the first row found.
 		int i = findRecord(id, filename, 0); // return
 		return i;
 	}
 	
-	public int findRecord(String id) {
+	public int findRecord(String id) {  // ADDED BY THUYTIEN
 		int i = findRecord(id, this.filename, 0); // return
 		return i;
 	}
 	
-	public int[] findAllRecord(String id, int colNum, String filename) {
+	public int[] findAllRecord(String id, int colNum, String filename) {  // ADDED BY THUYTIEN
 		// find record in any file name at column number colNum; only return the first row found.
 		int[] arrRow; // return this
 		String arrRowString = ""; // this will grow
@@ -199,11 +199,11 @@ public class Database {
 		return null;
 	}
 	
-	public int[] findAllRecord(String id, int colNum) {
+	public int[] findAllRecord(String id, int colNum) {   // ADDED BY THUYTIEN
 		return findAllRecord(id, colNum, this.filename);
 	}
 	
-	public boolean matchUserRecord(String userID, String password) {
+	public boolean matchUserRecord(String userID, String password) {  
 		filename = "Users";
 		String[] data = new String[12];
 		try {
@@ -300,7 +300,8 @@ public class Database {
 		}
 	}
 	
-	public void CreateCourseFile(String filename) {
+	// ADJUSTED BY THUYTIEN
+	public void CreateCourseFile(String filename) { 
 		this.filename = "Course";
 		try {
 			File myObj = new File(this.filepath + filename + ".csv");
@@ -324,6 +325,8 @@ public class Database {
 				pw.append("GERPE Type");
 				pw.append(",");
 				pw.append("AUs");
+				pw.append(",");
+				pw.append("Sessions"); // class info, eg: LEC MONDAY 10:00 13:00 LT12;TUT MONDAY 9:00 10:00 TR101 // ADDED BY THUYTIEN
 				pw.append("\n");
 				pw.flush();
 			} 

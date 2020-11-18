@@ -29,7 +29,6 @@ public class CourseIndex {
 	public CourseIndex(String index, String courseCode, int vacancy, int totalSize) {
 		// TODO: check if vacancy > totalSize. If yes, throw and error.
 		// registerIDs and waitIDs = null;
-		super();
 		this.index = index;
 		this.courseCode = courseCode;
 		this.vacancy = vacancy;
@@ -38,7 +37,6 @@ public class CourseIndex {
 	
 	public CourseIndex(String index, String courseCode, int vacancy, int totalSize, String[] classListRaw) {
 		// TODO: check if vacancy > totalSize. If yes, throw and error.
-		super();
 		this.index = index;
 		this.courseCode = courseCode;
 		this.vacancy = vacancy;
@@ -49,7 +47,6 @@ public class CourseIndex {
 	public CourseIndex(String index, String courseCode, int au, int grpNum ,InstructionCourseType courseType, String GERType, int vacancy, int totalSize) {
 		// TODO: check if vacancy > totalSize. If yes, throw and error.
 		// registerIDs and waitIDs = null;
-		super();
 		this.index = index;
 		this.courseCode = courseCode;
 		this.indexAU = au;
@@ -257,7 +254,7 @@ public class CourseIndex {
 	}
 	
 	public String toStringClassList() {
-		// eg. LEC MONDAY 10:00 13:00 LT12; TUT MONDAY 9:00 10:00 TR101; LAB TUESDAY 9:00 11:00 SCELAB1; 
+		// eg. "LEC MONDAY 10:00 13:00 LT12;TUT MONDAY 9:00 10:00 TR101;LAB TUESDAY 9:00 11:00 SCELAB1"
 		String temp = "";
 		if(this.classList == null) {
 			return "";

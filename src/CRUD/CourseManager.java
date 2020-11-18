@@ -39,7 +39,10 @@ public class CourseManager {
 		ci.setCourseType(details[6]);
 		ci.setGERType(details[7]);
 		ci.setIndexAU(Integer.parseInt(details[8]));
-//		ci.setClassList(details[9].split(";")); // sessions column
+		if (details.length > 9) {
+			ci.setClassList(details[9].split(";")); // sessions column
+		}
+		
 		return ci;
 	}
 	
