@@ -1,0 +1,36 @@
+public void updateFile(int i,int j, String updateString){
+		try {
+			// First we read in the whole file first
+			BufferedReader br = new BufferedReader(new FileReader(this.filepath + this.filename + ".csv"));
+			ArrayList<String> lines;
+			lines =  new ArrayList<String>();
+			String[] data;
+			String newLine;
+			String joined;
+			while ((newLine = br.readLine()) != null) {
+				//System.out.println(newLine);
+				lines.add(newLine);
+			}
+			
+			// After reading we retrieve the row and column that we want to change
+			// System.out.println(lines.get(i));
+			data = lines.get(i).split(","); // So if you are storing multiple items in a single column do not use comma to separate them!
+			data[j] = updateString;
+			joined = String.join(",", data);
+			lines.set(i,joined);
+			br.close(); // we need to close the buffered reader to start writing to it
+			
+			// Write back to csv
+			FileWriter writer = new FileWriter(this.filepath + this.filename + ".csv");
+			for (int k = 0; k < lines.size();k++) {
+				data = lines.get(k).split(",");
+				this.appendFile(data);
+			}
+			
+			writer.flush();
+			writer.close();
+		}catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}

@@ -1,0 +1,19 @@
+import java.util.Scanner;
+import java.util.Arrays;  
+
+public class testing {
+	public static void main(String[] args) {
+
+		Database D = new Database("C:\\Users\\yslee\\Downloads\\TestDatabase\\");
+		D.CreateFile("filename_test");
+		String[] details = {"Nathan", "U123456K", "kkkkk", "Math","2020-10-03 08:00:00","2020-10-06 20:10:15"};
+		//D.appendFile(details);
+		//D.appendFile(details);
+		//D.appendFile(details);
+		//D.matchRecord(details);
+		D.updateFile(0,0,"Testing_Names");
+		//System.out.print("Henry" == "Henry");
+		
+	}
+
+}
