@@ -129,29 +129,44 @@ public class test {
 //		 System.out.println(ci.getClassList().get(0).getStartTime() );
 //		 System.out.println(ci.getClassList().get(0).getEndTime() );
 		 
-		 Faculty s = new Faculty();
-		 s.setFaculty("math");
-		 System.out.println(s.getFaculty());
-
-		 DBObj dbo = new DBObj();	
-		 Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\", "Users");
-		 int i = db.findRecord("U123456B", "Users", 2);
-		 System.out.println("i = " + i);
+//		 Faculty s = new Faculty();
+//		 s.setFaculty("math");
+//		 System.out.println(s.getFaculty());
+//
+//		 DBObj dbo = new DBObj();	
+//		 Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\", "Users");
+//		 int i = db.findRecord("U123456B", "Users", 2);
+//		 System.out.println("i = " + i);
+//		 
+////		 ClassType ct = new ClassType("LEC MONDAY 10:00:00 13:00 LT12");
+//		 
+//		 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //
+//		 Date aa = null;
+//		 try {
+//			 aa = dateFormat.parse("19/11/20 08:08:08");
+//		 } catch (ParseException e) {
+//			 // TODO Auto-generated catch block
+//			 e.printStackTrace();
+//		 }
+//		 System.out.println(aa);
 		 
-//		 ClassType ct = new ClassType("LEC MONDAY 10:00:00 13:00 LT12");
+//		 AdminApp a = new AdminApp();
+//		 a.printAdminMenu();
 		 
-		 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"); //
-		 Date aa = null;
-		 try {
-			 aa = dateFormat.parse("19/11/20 08:08:08");
-		 } catch (ParseException e) {
-			 // TODO Auto-generated catch block
-			 e.printStackTrace();
-		 }
-		 System.out.println(aa);
+		 String index = "20001";
+		 Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		 db.setFilename("Course");
+		 String[] indexInfo = db.getRecord(index, "Course", 0);
 		 
-		 AdminApp a = new AdminApp();
-		 a.printAdminMenu();
+		 String[] stdList = indexInfo[3].split(";");
+		 System.out.println(indexInfo[3].equals(""));
+			
+		 System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
+		 for(int i = 0; i < stdList.length; i++) {
+			 if(stdList[i] != null && stdList[i].length() >= 1) {
+				 System.out.println(stdList[i]);
+			 }			
+		 }	
 
 	}
 

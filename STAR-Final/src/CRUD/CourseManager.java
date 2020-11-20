@@ -163,19 +163,27 @@ public class CourseManager {
 	/*/
 	 *  PRINT STUDENT LIST METHODS
 	 */
-	public int printStdByIndex(String index) {
+	public void printStdByIndex(String index) {
 		db.setFilename("Course");
 		String[] indexInfo = db.getRecord(index, "Course", 0);
 		if(indexInfo == null || indexInfo.length == 0) {
-			return -1; // course index not found
+			return ; // course index not found
 		}
-		String[] stdList = indexInfo[3].split(";");
+		
+		if(!indexInfo[3].equals("")) {
+			String[] stdList = indexInfo[3].split(";");
+			System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
+			for(int i = 0; i < stdList.length; i++) {
+//				if()
+				System.out.println(stdList[i]);			
+			}	
+		} else {
+			System.out.println("0 student registered to index " + index); 
+		}
+		
 		//print
-		System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
-		for(int i = 0; i < stdList.length; i++) {
-			System.out.println(stdList[i]);
-		}		
-		return 1; //  record found
+			
+		return ; //  record found
 	}
 	
 	public int printStdByCourse(String courseCode) {
@@ -189,7 +197,7 @@ public class CourseManager {
 		//print
 		System.out.println("List of students sucessfully registered to course " + courseCode + ":");
 		for(int i = 0; i < indices.length; i++) {
-			System.out.println(printStdByIndex(indices[i]));
+			printStdByIndex(indices[i]);
 		}		
 		return 1; //  record found
 	}
