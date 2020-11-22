@@ -349,7 +349,7 @@ public class AdminApp {
 				}
 				do {
 					Scanner sc2 = new Scanner(System.in);
-					System.out.print("Enter access start time with format: dd/mm/yyyy HH:mm:ss ");
+					System.out.print("Enter access end time with format: dd/mm/yyyy HH:mm:ss ");
 					endTime = sc2.nextLine();
 					try {
 						endReg = TimeHelper.GetStudentDateTime(endTime);
@@ -531,27 +531,32 @@ public class AdminApp {
 						
 					
 					System.out.print("Enter new vacancy to update: ");
-					int vacancy = sc.nextInt();
-					int editVacancy  = -1; // unsucessful update
-					do {
-						editVacancy =  cm.editIndexVacancy(index, vacancy);
-					} while(editVacancy < 0);
 					
+					int vacancy = sc.nextInt();
+					cm.editIndexVacancy(index, vacancy);
+//					int editVacancy  = -1; // unsucessful update
+//					do {
+//						editVacancy =  cm.editIndexVacancy(index, vacancy);
+//					} while(editVacancy < 0);
+					
+					break;
 					
 				case 5: // exit
 					break;
+					
 				default:
 					break;
 				}
+				break;
 			case 5: // Check vacancy based on index number
 				// verify if this index number exists.
 				index = null;		
 				
 				// verify if this index number exists. If exists return null and do nothing;	
 				do {
-					Scanner sc1 = new Scanner(System.in);
+//					Scanner sc1 = new Scanner(System.in);
 					System.out.print("Enter an index number: ");
-					index = sc1.next();
+					index = sc.next();
 					boolean courseIndexExist  = cm.checkCourseIndexExist(index);
 					if(!courseIndexExist) {
 //						throw new ErrorException("recordFound");
@@ -629,11 +634,11 @@ public class AdminApp {
 		} while(index == null);
 		
 		CourseIndex ci = new CourseIndex(index);
-		System.out.print("Please enter group number in " + index + ": ");
+		System.out.print("Please enter group number in index" + index + ": ");
 		int grpNum = sc.nextInt();
 		ci.setGrpNum(grpNum);
 		
-		System.out.print("Please enter vacancy in " + index + ": ");
+		System.out.print("Please enter vacancy in index " + index + ": ");
 		int vacancy = sc.nextInt();
 		ci.setVacancy(vacancy);		
 		
@@ -645,7 +650,6 @@ public class AdminApp {
 //		ClassType [] classTypes = new ClassType[n_session];
 		String typeStr = null, dayStr = null, startTimeStr = null, endTimeStr = null, venue;
 		for(int i = 0 ; i < n_session; i++) {
-			// TODO:  add check pattern here if have time
 			
 //			System.out.println("Enter session info with the following format");
 //			System.out.println("CLASS_TYPE DAY START_TIME(hh:mm) END_TIME(hh:mm) VENUE. EXAMPLE:");
@@ -653,10 +657,11 @@ public class AdminApp {
 //			String session_info = sc2.nextLine();
 //			ClassType ct = new ClassType(session_info);
 			
+			System.out.println("Enter the class info for session # " + (i+1));
 			ClassType ct = new ClassType();
 			do {
 				Scanner sc2 = new Scanner(System.in);
-				System.out.println("Enter class type. Only accept either {LEC, TUT, LAB}");
+				System.out.print("Enter class type. Only accept either {LEC, TUT, LAB}: ");
 				typeStr = sc2.next();
 				try {
 					InstructionType type = InstructionType.valueOf(typeStr);
@@ -670,7 +675,7 @@ public class AdminApp {
 			
 			do {
 				Scanner sc2 = new Scanner(System.in);
-				System.out.println("Enter weekday of class. Only accept either {MONDAY, TUESDAY, ...}");
+				System.out.print("Enter weekday of class. Only accept either {MONDAY, TUESDAY, ...}: ");
 				dayStr = sc2.next();
 				try {
 					DayOfWeek day = DayOfWeek.valueOf(dayStr);
@@ -684,7 +689,7 @@ public class AdminApp {
 			
 			do {
 				Scanner sc2 = new Scanner(System.in);
-				System.out.println("Enter start time of class in for mat HH:mm");
+				System.out.print("Enter start time of class in for mat HH:mm ");
 				startTimeStr = sc2.next();
 				try {
 					LocalTime startTime = TimeHelper.convertStringToTime(startTimeStr);
@@ -698,7 +703,7 @@ public class AdminApp {
 			
 			do {
 				Scanner sc2 = new Scanner(System.in);
-				System.out.println("Enter end time of class in for mat HH:mm");
+				System.out.print("Enter end time of class in for mat HH:mm ");
 				endTimeStr = sc2.next();
 				try {
 					LocalTime endTime = TimeHelper.convertStringToTime(endTimeStr);

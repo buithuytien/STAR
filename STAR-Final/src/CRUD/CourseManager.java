@@ -17,19 +17,19 @@ public class CourseManager {
 	Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");	
 	DBObj dbo = new DBObj(); //ADDED BY JY
 
-	public int editIndexVacancy(String index, int vacancy) {
+	public void editIndexVacancy(String index, int vacancy) {
 		db.setFilename("Course");
 		int index_line = db.findCourseIndexRecord(index, "Course");
 		if(index_line < 0) { // course index not found
 			System.out.println("Course index not found in database. Please create one or try again!");
-			return -1;
+			return ;
 		} 
 		// if index exists, create a course index object, and edit vacancy, then save to file. If no, do nothing, return 0;
 		// course index found at line index_line
 //		CourseIndex ci = getCourseIndexObj(index); //COMMENTED OUT BY JY
 		CourseIndex ci = dbo.getCourseObj(index); // ADDED BY JY
-		System.out.println("Current vacancy of index " + index + "is: " + ci.getVacancy());
-		System.out.println("Current number of registered students " + ci.getRegisteredIDs().size()); //ADDED BY JY
+//		System.out.println("Current vacancy of index " + index + "is: " + ci.getVacancy()); //COMMENTED OUT BY TT
+//		System.out.println("Current number of registered students " + ci.getRegisteredIDs().size()); //ADDED BY JY
 //		System.out.println("Current number of registered students " + ci.getNumRegisteredIDs()); //COMMENTED OUT BY JY
 		
 		ci.setVacancy(vacancy); // we will save this object to file
@@ -39,10 +39,10 @@ public class CourseManager {
 			// update file here
 			db.updateFile(index_line, 2, String.valueOf(updated_vacancy)); // 2 is the position of vacancy in a row
 			System.out.println("Index " + index + "vacancy updated sucessfully to " + updated_vacancy);
-			return 1;
+			return;
 		} else {
 			System.out.println("Index " + index + "vacancy NOT updated");
-			return -1;
+			return ;
 		}
 	}
 	

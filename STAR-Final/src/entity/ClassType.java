@@ -36,16 +36,12 @@ public class ClassType {
 		String rawtempt = raw;
 		rawtempt.replace("[", "");
 		rawtempt.replace("]", "");
-		//System.out.println(rawtempt);
 		String[] elem = rawtempt.split(" ");
-		//for (int j =0; j<elem.length; j++) { System.out.println(elem[j]);}
-		//type.setName(elem[0]);
-		//this.type = type.typeIT(elem[0]);
 		type = InstructionType.valueOf(elem[0]);
 		this.day = DayOfWeek.valueOf(elem[1]);
 		this.startTime = TimeHelper.convertStringToTime(elem[2]);
 		this.endTime = TimeHelper.convertStringToTime(elem[3]);
-		this.venue = elem[4];			
+		this.venue = elem[4];
 	}
 	
 	public String toString() {

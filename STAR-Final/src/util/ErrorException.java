@@ -16,6 +16,7 @@ public class ErrorException extends Exception{
 	public static final String error12 = "natError";
 	public static final String error13 = "phoneError";
 	public static final String error14 = "matricFound";
+	public static final String error15 = "timeError";
 	
 
 	public ErrorException(String error){
@@ -68,6 +69,8 @@ public class ErrorException extends Exception{
         if(error.equals(error14)) {
         	System.out.println("Student exist. Please enter a new matric number: ");
         }
-        
+        if(error.equals(error15)) {
+        	System.out.println("Please enter a valid access time (dd/mm/yyyy HH:mm:ss): ");
+        }
 	}
 }

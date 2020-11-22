@@ -2,6 +2,7 @@ package entity;
 import java.util.StringTokenizer;
 
 
+
 import App.AdminApp;
 import App.StarsLogin;
 import App.StudentApp;
@@ -9,7 +10,6 @@ import CRUD.CourseManager;
 import enums.*;
 import util.Database;
 
-import util.TextDB;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -150,23 +150,8 @@ public class test {
 //		 }
 //		 System.out.println(aa);
 		 
-//		 AdminApp a = new AdminApp();
-//		 a.printAdminMenu();
-		 
-		 String index = "20001";
-		 Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
-		 db.setFilename("Course");
-		 String[] indexInfo = db.getRecord(index, "Course", 0);
-		 
-		 String[] stdList = indexInfo[3].split(";");
-		 System.out.println(indexInfo[3].equals(""));
-			
-		 System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
-		 for(int i = 0; i < stdList.length; i++) {
-			 if(stdList[i] != null && stdList[i].length() >= 1) {
-				 System.out.println(stdList[i]);
-			 }			
-		 }	
+		 AdminApp a = new AdminApp();
+		 a.printAdminMenu();
 
 	}
 

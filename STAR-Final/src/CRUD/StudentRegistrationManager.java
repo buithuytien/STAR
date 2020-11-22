@@ -36,9 +36,12 @@ public class StudentRegistrationManager {
 			if (checkClash(stud,ci, null)) {
 				System.out.println("Course Clash!");
 			} else {
-				//System.out.println("Hello!");
 				ArrayList<String> regIdArr = ci.getRegisteredIDs(); 
-				regIdArr.add(matric); 
+				if(regIdArr.get(0).equals("")) { //null
+					regIdArr.set(0, matric);
+				} else {
+					regIdArr.add(matric); 
+				}
 				ci.setRegisterIDs(regIdArr); //column 3 
 				//System.out.println("Vacancy before is = " + vac);
 				//System.out.println("Vacancy after is = " + (vac-1));
@@ -58,13 +61,12 @@ public class StudentRegistrationManager {
 				System.out.println("Vacancy exceeded. Unable to add into waitlist. Course Clash!");
 			} else {
 				ArrayList<String> waitIdArr = ci.getWaitIDs(); 
-				waitIdArr.add(matric); 
+				if(waitIdArr.get(0).equals("")) { //null
+					waitIdArr.set(0, matric);
+				} else {
+					waitIdArr.add(matric); 
+				}
 				ci.setWaitIDs(waitIdArr); //column 4
-	//
-//				int i = dIndex.findRecord(ci.getIndex(), "Course", 0);
-//				String[] r = dbo.setCourseRow(ci);
-//				dIndex.updateFile(i, 4, r[4]);
-
 				dIndex.updateCourseInfo(index,dbo.setCourseRow(ci)); // update the row for this course into db
 				System.out.println("You are added to waitlist. Vacancy exceeded");
 			}
@@ -110,6 +112,13 @@ public class StudentRegistrationManager {
 					} else {
 						addIntoList(newStud, index);
 						dIndex.updateCourseInfo(index, dbo.setCourseRow(ci)); // update the row for this course into db
+						//send notification
+						String from = "ntucz2002@gmail.com"; //admin email
+						String pw = "cz2002assignment"; //set this as the password 
+						String to = newStud.getStudEmail();
+						String sub = "You have been allocated a new course!";
+						String msg = "Your registration for" + index + " is sucessful!";
+						Mailer.send(from, pw, to, sub, msg);
 						break;
 					}
 				}

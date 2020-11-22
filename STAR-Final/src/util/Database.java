@@ -27,7 +27,7 @@ public class Database {
 		this.filename = filename; // WITHOUT the .csv
 	}
 
-	public void setFilename(String filename) {this.filename = filename;}
+	public void setFilename(String filename) {this.filename = filename;} //USED BY JY
 	
 	public void appendFile(String[] rows, String filename) { // ADDED BY THUYTIEN, OVERLOAD THE PREVIOUS appendFile
 		try {
@@ -204,7 +204,7 @@ public class Database {
 		return findAllRecord(id, colNum, this.filename);
 	}
 	
-	public boolean matchUserRecord(String userID, String password) {  
+	public boolean matchUserRecord(String userID, String password) {   //USED BY JY
 		filename = "Users";
 		String[] data = new String[12];
 		try {
@@ -232,7 +232,7 @@ public class Database {
 		return false;
 	}
 	
-	public String[] getUserRecord(String userID) {
+	public String[] getUserRecord(String userID) { //USED BY JY
 		filename = "Users";
 		String[] data = new String[12];
 		try {
@@ -347,7 +347,7 @@ public class Database {
 	
 	
 	
-	public String[] getCourseInfoRecord(String course_index) {
+	public String[] getCourseInfoRecord(String course_index) { //USED BY JY
 		String[] data;
 		try {
 			String row;
@@ -368,7 +368,7 @@ public class Database {
 		return new String[0];
 	}
 	
-	public boolean matchCourseInfoRecord(String course_index) {
+	public boolean matchCourseInfoRecord(String course_index) { //USED BY JY
 		this.filename = "Course";
 		String[] data;
 		try {
@@ -422,14 +422,14 @@ public class Database {
 		return -1;
 	}
 	
-	public int findCourseIndexRecord(String course_index) {
-		// fine line number of course_index or course. -1 means not found.
-		// eg. findCourseIndexRecord("10001", "Course") OR findCourseIndexRecord("AB1001", "CourseInfo") 
-		int temp = findCourseIndexRecord(course_index, "Course");
-		return temp;
-	}
-	
-	public void updateCourseInfo(String index, String[] str) { //to update the whole row
+//	public int findCourseIndexRecord(String course_index) {
+//		// fine line number of course_index or course. -1 means not found.
+//		// eg. findCourseIndexRecord("10001", "Course") OR findCourseIndexRecord("AB1001", "CourseInfo") 
+//		int temp = findCourseIndexRecord(course_index, "Course");
+//		return temp;
+//	}
+//	
+	public void updateCourseInfo(String index, String[] str) { //to update the whole row //USED BY JY
 		// codes to flush the updated info into excel file
 		filename = "Course";
 		int i = findRecord(index, filename, 0);
@@ -438,7 +438,7 @@ public class Database {
 		}
 	}
 	
-	public ArrayList<String> returnIndexRecord(String item, int loc) { //eg. matric no. and regid location
+	public ArrayList<String> returnIndexRecord(String item, int loc) { //eg. matric no. and regid location //USED BY JY
 		filename = "Course";
 		String[] data;
 		ArrayList<String> index = new ArrayList<String>();
