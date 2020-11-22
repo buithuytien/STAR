@@ -243,7 +243,7 @@ public class AdminApp {
 						}
 					}
 				}while(faculty==null);
-				s.setFacaulty(faculty);
+				s.setFaculty(faculty);
 				//year
 				do{
 					System.out.print("Enter year of study: ");

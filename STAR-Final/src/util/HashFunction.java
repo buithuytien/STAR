@@ -5,11 +5,16 @@ public class HashFunction {
 	private String string_to_hash;
 	private int hash;
 	
-	public void HashFunction(){
+	public HashFunction(){
 		this.string_to_hash = "";
 		this.hash = 0;
 	}
 	
+	/**
+	 * Hashing Function
+	 * @param string_hash
+	 * @return the hashed string
+	 */
 	public int hash(String string_hash){
 		this.hash = 0; // reset to zero before I run anything
 		this.string_to_hash = string_hash;

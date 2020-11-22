@@ -20,13 +20,6 @@ public class TimeHelper {
 		// use to check student registration date time
 		Date temp = null;
 		temp = dateFormat.parse(strDateTime);
-//		 try {
-//			temp = dateFormat.parse(strDateTime);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println("ERROR: Incorrect date time format.");
-//		}
 		return temp;
 	}
 	
@@ -34,17 +27,11 @@ public class TimeHelper {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
 		LocalTime t = null;
 		t = LocalTime.parse(timeStr, formatter);		
-//		try {
-//			t = LocalTime.parse(timeStr, formatter);			
-//		} catch (DateTimeParseException e) {
-//			e.printStackTrace();
-//			System.out.println("ERROR: Wrong time format");
-//		}
 		return t;
 	}
 	
 	/**
-	 * method to convert the time into a string
+	 * Method To Convert The Time Into A String
 	 * @param time
 	 * @return string of the time
 	 */
@@ -54,9 +41,4 @@ public class TimeHelper {
 		
 		
 	}
-	
-//	public static void main(String[] args) {
-//		convertStringToTime("aa bb");
-//	}
-	
 }

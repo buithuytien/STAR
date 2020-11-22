@@ -16,7 +16,8 @@ public class testDB {
 			String filepath = System.getProperty("user.dir") + "\\src\\database\\";
 			String filename = "file_test";
 			String updateString = "update string test";
-			Database D = new Database(System.getProperty("user.dir") + "\\src\\database\\", "filename_test");
+			Database D = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+			D.setFilename("filename_test");
 			int i= 0, j = 0;
 
 			BufferedReader br = new BufferedReader(new FileReader(filepath + filename + ".csv"));
@@ -48,7 +49,7 @@ public class testDB {
 			FileWriter writer = new FileWriter(filepath + filename + ".csv");
 			for (int k = 0; k < lines.size();k++) {
 				data = lines.get(k).split(",");
-				D.appendFile(data);
+				D.appendFile(data,filename);
 			}
 
 

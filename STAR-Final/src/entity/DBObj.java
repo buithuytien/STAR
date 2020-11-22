@@ -19,9 +19,18 @@ public class DBObj {
 	Database dIndex = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	Database dInfo = new Database(System.getProperty("user.dir") + "\\src\\database\\");
 	
+	/**
+	 * Constructor
+	 */
 	public DBObj() {}
 	
-	// ADJUSTED BY THUYTIEN
+	/**
+	 * Get Student Object Using UserId From Database
+	 * @param matric
+	 * @return a Student object with its information extracted from database
+	 * @throws ErrorException
+	 * @throws ParseException
+	 */
 	public Student getStudentObj(String matric) throws ErrorException, ParseException {
 		dUser.setFilename("Users");
 		String[] details = dUser.getUserRecord(matric);
@@ -46,7 +55,11 @@ public class DBObj {
 			return s;
 		}		
 	}
-	
+/**
+ * Return Student Row Using Student Object
+ * @param s
+ * @return a list of information regarding this student object
+ */
 	public String[] setStudentRow(Student s) { //usually folo by similarcode to update to db: dUsers.updateCourseInfo(index, setStudentRow(s));
 		String[] details = new String[12];
 		details[0] = "S"; // s.getStudMat();
@@ -63,8 +76,11 @@ public class DBObj {
 		details[11] = dateFormat.format(s.getEndTime());
 		return details;
 	}
-	
-	// ADJUSTED BY THUYTIEN
+	/**
+	 * Get CourseIndex Object Using Index From Database
+	 * @param index
+	 * @return a CourseIndex object with its information extracted from database
+	 */
 	public CourseIndex getCourseObj(String index) {
 		dIndex.setFilename("Course");
 		String[] details = dIndex.getCourseInfoRecord(index);
@@ -97,27 +113,22 @@ public class DBObj {
 		ci.setClassList(ctArr); //ADDED BY JY
 		return ci;
 	}
-	
-	// ADJUSTED BY THUYTIEN
+	/**
+	 * Return CourseIndex Row Using CourseIndex Object
+	 * @param ci
+	 * @return a list of information regarding this courseindex object
+	 */
 	public String[] setCourseRow(CourseIndex ci) { //usually folo by similarcode to update to db: dIndex.updateCourseInfo(index, setCourseRow(ci)); 
 		String[] details = new String[10];
 		details[0] = ci.getIndex();
 		details[1] = ci.getCourseCode();
 		details[2] = String.valueOf(ci.getVacancy());
 		details[3] = String.join(";", ci.getRegisteredIDs());
-//		String listString = "";
-//		for (String s : ci.getRegisteredIDs()) {listString += s + ";";}
-//		details[3] = listString;
-//		String listString2 = "";
-//		for (String s : ci.getWaitIDs()) {listString2 += s + ";";}
-//		details[4] =listString2;
 		details[4] = String.join(";", ci.getWaitIDs());
 		details[5] = String.valueOf(ci.getGrpNum());
-		details[6] = String.valueOf(ci.getCourseType()); //details[6] = ci.getCourseType(); // ADDED BY THUYTIEN
+		details[6] = String.valueOf(ci.getCourseType());
 		details[7] = ci.getGERType();
 		details[8] = String.valueOf(ci.getIndexAU());
-//		details[9] = ci.toStringClassList(); // return LEC MONDAY 10:00 13:00 LT12;TUT MONDAY 9:00 10:00 TR101	// ADDED BY THUYTIEN //COMMENTED OUT BY JY
-//		String listString3 = ""; //ADDED BY JY
 		ArrayList<ClassType> ctArr = ci.getClassList(); //ADDED BY JY
 		ClassType ct;
 		ArrayList<String> ctArrStr = new ArrayList<String>();
@@ -126,32 +137,19 @@ public class DBObj {
 			ctArrStr.add(ct.toString());
 		}
 		details[9] = String.join(";",ctArrStr); 
-//		for (int i=0; i<ctArr.size(); i++) {listString3 += ctArr.get(i).toString() + ";";} //ADDED BY JY
-//		details[9] = listString3; //ADDED BY JY
-//		String listString3 =  ci.getClassList().toString();
-//		details[9] = String.join(";",listString3); //ADDED BY JY
 		return details;
 	}
-	
-	//ADDED BY JY
+	/**
+	 * Return Course Row Using Course Object
+	 * @param c
+	 * @return a list of information regarding this course object
+	 */
 	public String[] setCourseInfoRow(Course c) {
 		String[] s = new String[3]; // course code, index list and school code
-		
-		//ADDED BY JY
 		ArrayList<CourseIndex> ciArr = c.getCourseIndexList();
 		ArrayList<String> indexesArr = new ArrayList<String>();
 		for (int i =0; i<ciArr.size(); i++) {indexesArr.add(ciArr.get(i).getIndex());}
 		String indices = String.join(";", indexesArr);
-		
-		//COMMENTED OUT BY JY
-		// get string of indices: 10001;10002;10003 ...
-//		for(int i = 0; i < c.getCourseIndexList().size(); i++ ) {
-//			if(i < c.getCourseIndexList().size()-1 ) {
-//				indices += c.getCourseIndexList().get(i).getIndex() + ";";
-//			} else {
-//				indices += c.getCourseIndexList().get(i).getIndex();
-//			}
-//		}
 		s[0] = c.getCourseCode();
 		s[1] = indices;
 		s[2] = c.getSchoolCode();

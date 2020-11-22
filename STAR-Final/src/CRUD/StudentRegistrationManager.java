@@ -16,8 +16,15 @@ public class StudentRegistrationManager {
 	Database dIndex = new Database(System.getProperty("user.dir") + "\\src\\database\\"); // "C:\\"
 	DBObj dbo = new DBObj();
 	
-	/*
-	 * add index to student OR student to this index
+	/**
+	 * Constructor
+	 */
+	public StudentRegistrationManager() {}
+	
+	/**
+	 * Add Course Index (Student Action) 
+	 * @param stud
+	 * @param index
 	 */
 	public void addIntoList(Student stud, String index) {		
 		CourseIndex ci = new CourseIndex(index);
@@ -42,18 +49,10 @@ public class StudentRegistrationManager {
 				} else {
 					regIdArr.add(matric); 
 				}
-				ci.setRegisterIDs(regIdArr); //column 3 
-				//System.out.println("Vacancy before is = " + vac);
-				//System.out.println("Vacancy after is = " + (vac-1));
-				ci.setVacancy(vac-1); //column 2
-//				
-//				int i = dIndex.findRecord(ci.getIndex(), "Course", 0);
-//				String[] r = dbo.setCourseRow(ci);
-//				dIndex.updateFile(i, 3, r[3]);
-//				dIndex.updateFile(i, 2, r[2]);
-				
+				vac = vac-1;
+				ci.setVacancy(vac);
+				ci.setRegisterIDs(regIdArr); //column 3
 				dIndex.updateCourseInfo(index,dbo.setCourseRow(ci)); // update the row for this course into db
-				//System.out.println("Vancancy = " + vac);
 				System.out.println("You are added into the course successfully.");
 			}
 		} else {
@@ -74,8 +73,10 @@ public class StudentRegistrationManager {
 		
 	}
 	
-	/*
-	 * remove student from index OR index from student
+	/**
+	 * Drop Course Index (Student Action)
+	 * @param stud
+	 * @param index
 	 */
 	public void dropFromList(Student stud, String index) {
 		CourseIndex ci = new CourseIndex();
@@ -93,7 +94,6 @@ public class StudentRegistrationManager {
 			ArrayList<String> waitIdArr = ci.getWaitIDs(); 
 			waitIdArr.remove(matric); 
 			ci.setWaitIDs(waitIdArr);; //column 4
-			//ci.getWaitIDs().remove(wait_std_i);
 			dIndex.updateCourseInfo(index,dbo.setCourseRow(ci)); // update the row for this course into db
 			System.out.println("Student removed to waitlist.");
 		} else { //remove student from registered list
@@ -101,84 +101,95 @@ public class StudentRegistrationManager {
 			regIdArr.remove(main_std_i); 
 			ci.setRegisterIDs(regIdArr); //column 3 
 			System.out.println("You are removed from the registered list.");
-			//ci.getRegisteredIDs().remove(main_std_i);
-			//System.out.println("Student removed to registered list. Vacancy +1");
-			//System.out.println("ci.getwaitid" + ci.getWaitIDs().size() +"      xx" + ci.getWaitIDs().get(0) + " xx" + ci.getWaitIDs().get(0).length());
 			if (ci.getWaitIDs().get(0).length()>1) { //not empty waitlist 
 				for (int xx =0; xx < ci.getWaitIDs().size() ; xx++) {
 					Student newStud = new Student(ci.getWaitIDs().get(xx));
 					if (checkClash(newStud, ci, null) == true) {
 						xx = xx+1;
 					} else {
-						addIntoList(newStud, index);
+						if(regIdArr.get(0).equals("")) { //null
+							regIdArr.set(0, newStud.getStudMat());
+						} else {
+							regIdArr.add(newStud.getStudMat()); 
+						}
+						ci.setRegisterIDs(regIdArr); //column 3
+						ArrayList<String> waitIdArr = ci.getWaitIDs(); 
+						waitIdArr.remove(newStud.getStudMat()); 
+						ci.setWaitIDs(waitIdArr);; //column 4
 						dIndex.updateCourseInfo(index, dbo.setCourseRow(ci)); // update the row for this course into db
 						//send notification
 						String from = "ntucz2002@gmail.com"; //admin email
 						String pw = "cz2002assignment"; //set this as the password 
-						String to = newStud.getStudEmail();
+						String to = "mojunyi20@gmail.com";
 						String sub = "You have been allocated a new course!";
 						String msg = "Your registration for" + index + " is sucessful!";
 						Mailer.send(from, pw, to, sub, msg);
+						System.out.println("A new student has been added to this course index.");
 						break;
 					}
 				}
 			} else {
-				//System.out.println("Vacancy before is = " + vac);
 				vac = vac+1;
-				//System.out.println("Vacancy after is = " + vac);
 				ci.setVacancy(vac);
 			}
 			dIndex.updateCourseInfo(index, dbo.setCourseRow(ci)); // update the row for this course into db
 		}
 	}
 	
-	/*
-	 * Check vacancies
+	/**
+	 * Check Vacancies (Student Action)
+	 * @param courseIndex
+	 * @return vacancy of this class
 	 */
 	public int checkVacancies(String courseIndex) {
 		CourseIndex ci = dbo.getCourseObj(courseIndex);
 		return ci.getVacancy();
 	}
 	
-	/*/
-	 * Print course registered
+	/**
+	 * Print Course Registration (Student Action)
+	 * @param stud
 	 */
 	public void printCourseReg(Student stud) {
 		dIndex.setFilename("Course");
 		System.out.println("Name: " + stud.getStudName());
 		System.out.println("-----------------------------------------------------------------------------------------------------------------------");
-		System.out.println("Course Index	|AU	|Course Code	|Course Type	|GER Type	|Status	|Group Number	|Session    |");
+		System.out.println("Index	| AU |Course Code|Course Type	|GER Type|Status    |Group Number|Session    							");
 		ArrayList<String> regIndex = dIndex.returnIndexRecord(stud.getStudMat(), 3); //return the list of indexes student is registered
 		ArrayList<String> waitIndex = dIndex.returnIndexRecord(stud.getStudMat(), 4); // return the list of wait list index for this student
 		for (int i=0; i<regIndex.size();i++) {
 			CourseIndex c = dbo.getCourseObj(regIndex.get(i));
-			System.out.print(c.getIndex() + "	|	");
-			System.out.print(c.getIndexAU() + "	|	");
-			System.out.print(c.getCourseCode() + "	|	");
-			System.out.print(c.getCourseType() + "	|	");
-			System.out.print(c.getGERType() + "	|	");
-			System.out.print("Registered" + "	|	");
-			System.out.print(c.getGrpNum() + "	|	");
-			System.out.print(String.join(";",c.getClassList().toString()) + "	|	");
+			System.out.print(c.getIndex() + "	| ");
+			System.out.print(c.getIndexAU() + "  |	");
+			System.out.print(c.getCourseCode() + "	 |	");
+			System.out.print(c.getCourseType() + "	|   ");
+			System.out.print(c.getGERType() + "	 |");
+			System.out.print("Registered" + "|	  ");
+			System.out.print(c.getGrpNum() + "	 |");
+			System.out.print(String.join(";",c.getClassList().toString()));
 			System.out.println("");
 		}
 		for (int i=0; i<waitIndex.size();i++) {
 			CourseIndex c = dbo.getCourseObj(waitIndex.get(i));
-			System.out.print(c.getIndex() + "	|	");
-			System.out.print(c.getIndexAU() + "	|	");
-			System.out.print(c.getCourseCode() + "	|	");
-			System.out.print(c.getCourseType() + "	|	");
-			System.out.print(c.getGERType() + "	|	");
-			System.out.print("Pending" + "	|	");
-			System.out.print(c.getGrpNum() + "	|	");
-			System.out.print(String.join(";",c.getClassList().toString()) + "	|	");
+			System.out.print(c.getIndex() + "	| ");
+			System.out.print(c.getIndexAU() + "  |	");
+			System.out.print(c.getCourseCode() + "	 |	");
+			System.out.print(c.getCourseType() + "	|   ");
+			System.out.print(c.getGERType() + "	 |");
+			System.out.print("Pending" + "   |	  ");
+			System.out.print(c.getGrpNum() + "	 |");
+			System.out.print(String.join(";",c.getClassList().toString()));
 			System.out.println("");
 		}
 			
 	}
 	
-	/*
-	 * Switching index with another person
+	/**
+	 * Switching Index With Another Peer (Student Action)
+	 * @param stud1
+	 * @param index1
+	 * @param stud2
+	 * @param index2
 	 */
 	public void swopIndex(Student stud1, String index1, Student stud2, String index2) {
 		dIndex.setFilename("Course");
@@ -212,11 +223,12 @@ public class StudentRegistrationManager {
 		} else {System.out.println("Error! Unable to swop index!!");}
 	}
 	
-	
-	/*
-	 * Switching indexes of registered course
+	/**
+	 * Changing Index (Student Action)
+	 * @param stud
+	 * @param index1
+	 * @param index2
 	 */
-	
 	public void changeIndex(Student stud, String index1, String index2) {
 		dIndex.setFilename("Course");
 		ArrayList<String> studRegIndex = dIndex.returnIndexRecord(stud.getStudMat(), 3); // return student current registered indexes
@@ -251,8 +263,12 @@ public class StudentRegistrationManager {
 	}
 	
 	
-	/*
-	 * Check clash!!
+	/**
+	 * Check Course Against Current Registered Courses
+	 * @param stud
+	 * @param ci
+	 * @param del
+	 * @return if this course index is clashed with the current registered courses
 	 */
 	public boolean checkClash(Student stud, CourseIndex ci, CourseIndex del) { //ADJUSTMENT
 		dIndex.setFilename("Course");
@@ -261,7 +277,6 @@ public class StudentRegistrationManager {
 		ArrayList<LocalTime> regStartArr = new ArrayList<LocalTime>();
 		ArrayList<LocalTime> regEndArr = new ArrayList<LocalTime>();
 		ArrayList<String> regDayArr = new ArrayList<String>();
-		//System.out.println("Hello! 1");
 		for (int i=0;i<studRegIndex.size();i++) { //3 arraylist of the registered info timings
 			String[] c = dIndex.getCourseInfoRecord(studRegIndex.get(i));
 			String[] strList = c[9].split(";"); //read in String[] {"LEC MONDAY 10:00 13:00 LT12"; "TUT MONDAY 9:00 10:00 TR101"}
@@ -270,7 +285,6 @@ public class StudentRegistrationManager {
 				regDayArr.add(sl[1]);
 				regStartArr.add(TimeHelper.convertStringToTime(sl[2]));
 				regEndArr.add(TimeHelper.convertStringToTime(sl[3]));
-				//System.out.println("Hello! 3");
 			}
 		}
 		//System.out.println("Hello! 2");
@@ -285,36 +299,21 @@ public class StudentRegistrationManager {
 			newDayArr.add(sl1[1]);
 			newStartArr.add(TimeHelper.convertStringToTime(sl1[2]));
 			newEndArr.add(TimeHelper.convertStringToTime(sl1[3]));
-			//System.out.println("Hello! 4");
 		}
-		
 		//check clash
 		for(int i=0; i<newStartArr.size();i++) { //run through the new index timings, eg this new index has 2 classtype, so there's 2 start time in this array
 			for(int j=0; j<regStartArr.size();j++) { //run through all the registered array timings
 				if (newDayArr.get(i).equals(regDayArr.get(j))) { //session fall on same day 
-					//System.out.println("Hello! 6");
-					//System.out.println("newstart : " + newStartArr.get(i) + " regstart : " + regStartArr.get(i) + " compare 1: " + newEndArr.get(i).compareTo(regStartArr.get(i)));
-					//System.out.println("Compare 2: " + newStartArr.get(i).compareTo(regEndArr.get(i)));
 					if (newEndArr.get(i).compareTo(regStartArr.get(i)) <=0 || newStartArr.get(i).compareTo(regEndArr.get(i)) >=0) {
-					//if((newStartArr.get(i).isBefore(regStartArr.get(j)) && newEndArr.get(i).isBefore(regStartArr.get(j))) || (newStartArr.get(i).isAfter(regEndArr.get(j)) && newEndArr.get(i).isAfter(regEndArr.get(j)))) {
-						//new sessions outside of registered time, skip through as it doesnt clash
-						//System.out.println("Hello! 7");
-						continue;
 					}else { //clashes
-						//System.out.println("Hello! 8");
 						return true;
 					}
 				} else { //doesnt fall on same day, skip through as it doesnt clash
-					//System.out.println("Hello! 5");
-					//System.out.println("Hello!" + newDayArr.get(i));
-					//System.out.println("Hello!" + regDayArr.get(j));
 					continue;
 				} 
 				
 			}
 		}
-		//System.out.println("Hello! 9");
 		return false;	
 	}
-	
 }

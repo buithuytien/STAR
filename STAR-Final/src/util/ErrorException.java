@@ -18,7 +18,11 @@ public class ErrorException extends Exception{
 	public static final String error14 = "matricFound";
 	public static final String error15 = "timeError";
 	
-
+	/**
+	 * Handles All Error Exceptions
+	 * Prompt User To Re-enter Their Choice
+	 * @param error
+	 */
 	public ErrorException(String error){
 		if(error.equals(error1)){
 			System.out.println("ERROR: Please enter a valid choice.");

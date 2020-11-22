@@ -14,7 +14,8 @@ public class StudentManager {
 	
 	public int changeAccessPeriod(Student stud, Date startReg, Date endReg ) { // String startTime, String endTime //throws ParseException 
 		DBObj dbo = new DBObj();	
-		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\", "Users");
+		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		db.setFilename("Users");
 		
 		int i = db.findRecord(stud.getStudMat(), "Users", 2);
 		
@@ -30,7 +31,8 @@ public class StudentManager {
 
 	public void createNewStudent(Student s) {
 		DBObj dbo = new DBObj();	
-		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\", "Users");
+		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		db.setFilename("Users");
 		PeopleManager pm = new PeopleManager();
 		String pw = "name.toLowerCase().charAt(0)" + "name.toLowerCase().charAt(0)"+"name.toLowerCase().charAt(0)"+"name.toLowerCase().charAt(0)"+"name.toLowerCase().charAt(0)"; //ADDED BY JY
 		String password = s.getStudMat() + pw; //ADDED BY JY
@@ -38,7 +40,7 @@ public class StudentManager {
 		s.setPassword(password_hash); //ADDED BY JY
 		s.setStudEmail(s.getStudMat() + "@e.ntu.edu.sg");
 		String[] r = dbo.setStudentRow(s);
-		db.appendFile(r);
+		db.appendFile(r, "Users");
 	}
 
 }
