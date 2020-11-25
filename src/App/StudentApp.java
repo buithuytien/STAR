@@ -1,17 +1,27 @@
 package App;
 
 import java.io.*;
+
 import java.util.*;
+
+import CRUD.*;
 import enums.*;
 import entity.*;
 import util.*;
+
+/**
+ * class prompting for user's input for student features
+ * @author BUITT
+ *
+ */
 
 public class StudentApp {
 	public static void printStudentMenu(Student stud){
 		Date currentDayTime = new Date();
 		Scanner sc = new Scanner(System.in);
-		
-		StudentRegistration sr = new StudentRegistration();
+
+		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		StudentRegistrationManager srm = new StudentRegistrationManager();
 		
 		int subMenuOption = 0;
 
@@ -40,7 +50,6 @@ public class StudentApp {
 				System.out.println("");
 				subMenuOption=0;
 			}
-
 			catch(ErrorException e){
 			}
 
@@ -51,88 +60,208 @@ public class StudentApp {
 			switch(subMenuOption){
 			case 1:
 				do{
-					try{
-						System.out.print("Enter index number of course to add: ");
-						courseIndex = sc.next();
-						sr.addIntoList(stud, courseIndex);
-					}
-					catch(InputMismatchException e){
-						System.out.println("Please enter a valid index number");
-						sc.nextLine();
-						System.out.println("");
-					}
-				}while(courseIndex==null);
-
-				break;
-			case 2:
-				do{
-					try{
-						System.out.print("Enter index no of course to drop: ");
-						courseIndex = sc.next();
-						sr.dropFromList(stud, courseIndex);
-					}
-					catch(InputMismatchException e){
-						System.out.println("Please enter a valid index number");
-						sc.nextLine();
-						System.out.println("");
-					}
-				}while(courseIndex==null);
-				break;
-			case 3:
-				sr.printCourseReg(stud);
-				break;
-			case 4:
-				sc.nextLine();
-				System.out.print("Enter course index to check vacancy: ");
-				courseIndex = sc.next();
-				sr.checkVacancies(courseIndex);
-				break;
-			case 5:
-				do{
-					try{
-						System.out.print("Enter current index number: ");
-						courseIndex = sc.next();
-						System.out.println("");
-						System.out.print("Enter index you want: ");
-						swopCourseIndex = sc.next();
-						System.out.println("");
-						sr.changeIndex(stud, courseIndex, swopCourseIndex);
-					}
-					catch(InputMismatchException e){
-						System.out.println("Please enter a valid index number");
-						sc.nextLine();
-						System.out.println("");
-						System.out.print("Enter index you want: ");
-						swopCourseIndex = sc.next();
-						System.out.println("");
-					}
-				}while(courseIndex==null || swopCourseIndex==null);
-				break;
-			case 6:
-				do{
-					try{
-						Console console = System.console();
-						System.out.print("Enter your index no: ");
-						courseIndex = sc.next();
-						sc.nextLine();
-						System.out.print("Enter peer student Id: ");
-						swopUserId = sc.nextLine();
-						swopUserPassword = String.copyValueOf((console.readPassword("Enter peer student password: ")));
-						System.out.print("Enter peer index no to swop: ");
-						swopCourseIndex = sc.next();
-
-						if(people.signIn(swopUserId, swopUserPassword) == 'S'){
-							Student stud2 = new Student(swopUserId);
-							sr.swopIndex(stud, courseIndex, stud2, swopCourseIndex);
+					db.setFilename("Course");
+					System.out.print("Enter index number of course to add: ");
+					while(true) {
+						try{ //ADDED BY JY
+							courseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(courseIndex) == false) {
+								throw new ErrorException("indexNotFound");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no:");
+							courseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
 						}
 					}
-					catch(InputMismatchException e){
-						System.out.println("Please enter a valid index number");
-						sc.nextLine();
-						System.out.println("");
-					}
-				}while(courseIndex==null || swopCourseIndex==null);
+				}while(courseIndex==null);
+				srm.addIntoList(stud, courseIndex);
 				break;
+				
+			case 2:
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter index number of course to drop: ");
+					while(true) {
+						try{ //ADDED BY JY
+							courseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(courseIndex) == false) {
+								throw new ErrorException("indexNotFound");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no:");
+							courseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(courseIndex==null);
+				srm.dropFromList(stud, courseIndex);
+				break;
+				
+			case 3:
+				srm.printCourseReg(stud);
+				break;
+				
+			case 4:
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter index number of course to check vacancy: ");
+					while(true) {
+						try{ //ADDED BY JY
+							courseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(courseIndex) == false) {
+								throw new ErrorException("indexNotFound");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no:");
+							courseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(courseIndex==null);
+				
+				System.out.println("Vacancies for " + courseIndex + " is: " + srm.checkVacancies(courseIndex));
+				break;
+				
+			case 5:
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter your current index number: ");
+					while(true) {
+						try{ //ADDED BY JY
+							courseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(courseIndex) == false || !db.returnIndexRecord(stud.getStudMat(), 3).contains(courseIndex)) {
+								throw new ErrorException("indexNotMatch");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no:");
+							courseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(courseIndex==null);
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter the index number you wish to swop to: ");
+					while(true) {
+						try{ //ADDED BY JY
+							swopCourseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(swopCourseIndex) == false) {
+								throw new ErrorException("indexNotMatch");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no:");
+							swopCourseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(swopCourseIndex==null);
+				srm.changeIndex(stud, courseIndex, swopCourseIndex);
+				break;
+				
+			case 6:
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter your current index number: ");
+					while(true) {
+						try{ //ADDED BY JY
+							courseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(courseIndex) == false || !db.returnIndexRecord(stud.getStudMat(), 3).contains(courseIndex)) {
+								throw new ErrorException("indexNotMatch");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no from the list you have registered:");
+							courseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(courseIndex==null);
+				do{
+					db.setFilename("Users");
+					System.out.print("Enter your peer matric number: ");
+					while(true) {
+						try{ //ADDED BY JY
+							swopUserId = sc.next();
+							System.out.println("");
+							System.out.print("Enter peer student password: ");
+							swopUserPassword = sc.next();
+							System.out.println("");
+							swopUserPassword = swopUserId + swopUserPassword;
+							String swopUserPassword_hash = people.generateHash(swopUserPassword);
+							if(people.signIn(swopUserId, swopUserPassword_hash) != 'S') {
+								throw new ErrorException("studentmatric");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid peer matric no:");
+							swopUserId = sc.next();
+							System.out.println("");
+							System.out.print("Enter peer student password: ");
+							swopUserPassword = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(swopUserId==null || swopUserPassword==null);
+				do{
+					db.setFilename("Course");
+					System.out.print("Enter your peer's index number you wish to swop to: ");
+					while(true) {
+						try{ //ADDED BY JY
+							swopCourseIndex = sc.next();	
+							if(db.matchCourseInfoRecord(swopCourseIndex) == false || !db.returnIndexRecord(swopUserId, 3).contains(swopCourseIndex)) {
+								throw new ErrorException("indexNotMatch");
+							}
+							break;
+						}
+						catch(InputMismatchException e){
+							System.out.println("Please enter a valid index no from the list your peer has registered for:");
+							swopCourseIndex = sc.next();
+							System.out.println("");
+							continue;
+						}
+						catch(ErrorException e){
+						}
+					}
+				}while(swopCourseIndex==null);
+				
+				Student stud2 = new Student(swopUserId);
+				srm.swopIndex(stud, courseIndex, stud2, swopCourseIndex);
+				break;
+				
 			case 7:
 				System.out.println("Logging Out from Stars Application.");
 				break;
@@ -142,6 +271,6 @@ public class StudentApp {
 			System.out.println("");
 		}while(subMenuOption!=7);
 		stud = null;
-		sr = null;
+		srm = null;
 	}
 }

@@ -1,161 +1,170 @@
 package entity;
 import java.util.*;
-import java.time.DayOfWeek;
-import enums.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+/**
+ * Represent a student user of the STARS system
+ * One student can register multiple courses
+ * @author BUITT
+ *
+ */
 public class Student extends People{
-	SimpleDateFormat fullformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	//String dateString = fullformat.format( new Date()   );
-	//Date   date       = fullformat.parse ( "2009-12-31" );    
+	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
 	
+	/**
+	 * this student's name
+	 */
 	private String studName;
+	
+	/**
+	 * this student's matric number, or ID
+	 */
 	private String studMatric;
+	
+	/**
+	 * this student's gender, either F or M
+	 */
 	private char studGender;
+	
+	/**
+	 * this student's nationality
+	 */
 	private String studNationality;
+	
+	/**
+	 * this student's study year, from 1 to 6
+	 */
 	private int studYear;
+	
+	/**
+	 * this student's phone number
+	 */
 	private int studPhoneNum;
+	
+	/**
+	 * this student's email
+	 */
 	private String studEmail;
+	
+	/**
+	 * this student's start time of the access period to the STARS system
+	 */
 	private Date studStartTime;
+	
+	/**
+	 * this student's end time of the access period to the STARS system
+	 */
 	private Date studEndTime;
 	
-//	private ArrayList<String> studAUBalance;
-	
-//	private Course course;
-	
-//	print(){
-//		Course.getAllCourse();//return arraylist courses
-//		CourseRegistration.getAllRegisteredCourse(Student stud); // return arraylist courseRegistration
-//		
-//		for(CourseRegistration) {
-//			//Course Index CourseRegistration.getIndex();
-//			
-//			//if arraylist.getCourse() == Index
-//				//Print();
-//		}
-//	}
-//	
-//	
-	public ArrayList<String> studRegCourse;
-	public ArrayList<Integer> studRegAU;
-	public ArrayList<String> studRegCourseType;
-	public ArrayList<String> studRegGERType;	
-	public ArrayList<String> studRegIndex;
-	public ArrayList<String> studRegStatus;
-	public ArrayList<Integer> studRegChoice;
-	public ArrayList<InstructionType> studRegClassType;
-	public ArrayList<Integer> studRegClassGroup;
-	public ArrayList<DayOfWeek> studRegClassDay;
-	public ArrayList<String> studRegClassTime;
-	public ArrayList<String> studRegVenue;
-	public ArrayList<String> studRegRemarks;
-	
-	public ArrayList<String> studPendCourse;
-	public ArrayList<Integer> studPendAU;
-	public ArrayList<String> studPendCourseType;
-	public ArrayList<String> studPendGERType;	
-	public ArrayList<String> studPendIndex;
-	public ArrayList<String> studPendStatus;
-	public ArrayList<Integer> studPendChoice;
-	public ArrayList<InstructionType> studPendClassType;
-	public ArrayList<Integer> studPendClassGroup;
-	public ArrayList<DayOfWeek> studPendClassDay;
-	public ArrayList<String> studPendClassTime;
-	public ArrayList<String> studPendVenue;
-	public ArrayList<String> studPendRemarks;
-	
-	/*
+	/**
 	 * Constructor
 	 */
-	
 	public Student() {}
 	
-	public Student(String matric) {
-		this.studMatric = matric;
-	}
+	public Student(String matric) {this.studMatric = matric;}
 	
-	
-	/*
-	 * Getter and Setter
+	/**
+	 * Get Student Name
+	 * @return this student's name
 	 */
-	
 	public String getStudName() {return studName;}
+	/**
+	 * Set Student Name
+	 * @param studName
+	 */
 	public void setStudName(String studName) {this.studName = studName;}
+	/**
+	 * Get Student UserId
+	 * @return this student's userid/matric number
+	 */
 	public String getStudMat() {return studMatric;}
+	/**
+	 * Set Student UserId
+	 * @param studMatric
+	 */
 	public void setStudMat(String studMatric) {this.studMatric = studMatric;}
+	/**
+	 * Get Student Gender
+	 * @return this student's gender
+	 */
 	public char getStudGender() {return studGender;}
+	/**
+	 * Set Student Gender
+	 * @param studGender
+	 */
 	public void setStudGender(char studGender) {this.studGender = studGender;}
+	/**
+	 * Get Student Nationality
+	 * @return this student's nationality
+	 */
 	public String getStudNat() {return studNationality;}
+	/**
+	 * Set Student Nationality
+	 * @param studNationality
+	 */
 	public void setStudNat(String studNationality) {this.studNationality = studNationality;}
+	/**
+	 * Get Student Year
+	 * @return this student's year
+	 */
 	public int getStudYear() {return studYear;}
+	/**
+	 * Set Student Year
+	 * @param studYear
+	 */
 	public void setStudYear(int studYear) {this.studYear = studYear;}
+	/**
+	 * Get Student Number
+	 * @return this student's phone number
+	 */
 	public int getStudNum() {return studPhoneNum;}
+	/**
+	 * Set Student Number
+	 * @param studPhoneNum
+	 */
 	public void setStudNum(int studPhoneNum) {this.studPhoneNum = studPhoneNum;}
+	/**
+	 * Get Student Email
+	 * @return this student's email address
+	 */
 	public String getStudEmail() {return studEmail;}
+	/**
+	 * Set Student Email
+	 * @param studEmail
+	 */
 	public void setStudEmail(String studEmail) {this.studEmail = studEmail;}
+	/**
+	 * Get Student Access Start Time
+	 * @return this student's access start time
+	 */
 	public Date getStartTime() {return studStartTime;}
+	/**
+	 * Set Student Access Start Time (Using Time Format)
+	 * @param time
+	 */
 	public void setStartTime(Date time) {this.studStartTime = time;}
+	/**
+	 * Get Student Access End Time 
+	 * @return this student's access end time
+	 */
 	public Date getEndTime() {return studEndTime;}
+	/**
+	 * Set Student Access End Time
+	 * @param time
+	 */
 	public void setEndTime(Date time) {this.studEndTime = time;}
-	
-	
-	public ArrayList<String> getRegCourse() { return studRegCourse;}
-	public ArrayList<Integer> getRegAU() { return studRegAU;}
-	public ArrayList<String> getRegCourseType() { return studRegCourseType;}
-	public ArrayList<String> getRegGERPEType() { return studRegGERType;}	
-	public ArrayList<String> getRegIndex() { return studRegIndex;}
-	public ArrayList<String> getRegStatus() { return studRegStatus;}
-	public ArrayList<Integer> getRegChoice() { return studRegChoice;}
-	public ArrayList<InstructionType> getRegClassType() { return studRegClassType;}
-	public ArrayList<Integer> getRegClassGroup() { return studRegClassGroup;}
-	public ArrayList<DayOfWeek> getRegClassDay() { return studRegClassDay;}
-	public ArrayList<String> getRegClassTime() { return studRegClassTime;}
-	public ArrayList<String> getRegVenue() { return studRegVenue;}
-	public ArrayList<String> getRegRemarks() { return studRegRemarks;}
-	
-	public void setRegCourse(ArrayList<String> studRegCourse) {this.studRegCourse = studRegCourse;}
-	public void setRegAU(ArrayList<Integer> studRegAU) {this.studRegAU = studRegAU;}
-	public void setRegCourseType(ArrayList<String> studRegCourseType) {this.studRegCourseType = studRegCourseType;}
-	public void setRegGERType(ArrayList<String> studRegGERType) {this.studRegGERType = studRegGERType;}	
-	public void setRegIndex(ArrayList<String> studRegIndex) {this.studRegIndex = studRegIndex;}
-	public void setRegStatus(ArrayList<String> studRegStatus) {this.studRegStatus = studRegStatus;}
-	public void setRegChoice(ArrayList<Integer> studRegChoice) {this.studRegChoice = studRegChoice;}
-	public void setRegClassType(ArrayList<InstructionType> studRegClassType) {this.studRegClassType = studRegClassType;}
-	public void setRegClassGroup(ArrayList<Integer> studRegClassGroup) {this.studRegClassGroup = studRegClassGroup;}
-	public void setRegClassDay(ArrayList<DayOfWeek> studRegClassDay) {this.studRegClassDay = studRegClassDay;}
-	public void setRegClassTime(ArrayList<String> studRegClassTime) {this.studRegClassTime = studRegClassTime;}
-	public void setRegVenue(ArrayList<String> studRegVenue) {this.studRegVenue = studRegVenue;}
-	public void setRegRemarks(ArrayList<String> studRegRemarks) {this.studRegRemarks = studRegRemarks;}
-	
-
-	public ArrayList<String> getPendCourse() { return studPendCourse;}
-	public ArrayList<Integer> getPendAU() { return studPendAU;}
-	public ArrayList<String> getPendCourseType() { return studPendCourseType;}
-	public ArrayList<String> getPendGERPEType() { return studPendGERType;}	
-	public ArrayList<String> getPendIndex() { return studPendIndex;}
-	public ArrayList<String> getPendStatus() { return studPendStatus;}
-	public ArrayList<Integer> getPendChoice() { return studPendChoice;}
-	public ArrayList<InstructionType> getPendClassType() { return studPendClassType;}
-	public ArrayList<Integer> getPendClassGroup() { return studPendClassGroup;}
-	public ArrayList<DayOfWeek> getPendClassDay() { return studPendClassDay;}
-	public ArrayList<String> getPendClassTime() { return studPendClassTime;}
-	public ArrayList<String> getPendVenue() { return studPendVenue;}
-	public ArrayList<String> getPendRemarks() { return studPendRemarks;}
-	
-	public void setPendCourse(ArrayList<String> studPendCourse) {this.studPendCourse = studPendCourse;}
-	public void setPendAU(ArrayList<Integer> studPendAU) {this.studPendAU = studPendAU;}
-	public void setPendCourseType(ArrayList<String> studPendCourseType) {this.studPendCourseType = studPendCourseType;}
-	public void setPendGERType(ArrayList<String> studPendGERType) {this.studPendGERType = studPendGERType;}	
-	public void setPendIndex(ArrayList<String> studPendIndex) {this.studPendIndex = studPendIndex;}
-	public void setPendStatus(ArrayList<String> studPendStatus) {this.studPendStatus = studPendStatus;}
-	public void setPendChoice(ArrayList<Integer> studPendChoice) {this.studPendChoice = studPendChoice;}
-	public void setPendClassType(ArrayList<InstructionType> studPendClassType) {this.studPendClassType = studPendClassType;}
-	public void setPendClassGroup(ArrayList<Integer> studPendClassGroup) {this.studPendClassGroup = studPendClassGroup;}
-	public void setPendClassDay(ArrayList<DayOfWeek> studPendClassDay) {this.studPendClassDay = studPendClassDay;}
-	public void setPendClassTime(ArrayList<String> studPendClassTime) {this.studPendClassTime = studPendClassTime;}
-	public void setPendVenue(ArrayList<String> studPendVenue) {this.studPendVenue = studPendVenue;}
-	public void setPendRemarks(ArrayList<String> studPendRemarks) {this.studPendRemarks = studPendRemarks;}
-	
+	/**
+	 * Set Student Access Start Time (Using Time In String Format)
+	 * @param timeStr
+	 * @throws ParseException
+	 */
+	public void setStartTime(String timeStr) throws ParseException {this.studStartTime = dateFormat.parse(timeStr);}
+	/**
+	 * Set Student Access End Time (Using Time In String Format)
+	 * @param timeStr
+	 * @throws ParseException
+	 */
+	public void setEndTime(String timeStr) throws ParseException {this.studEndTime = dateFormat.parse(timeStr);}
 
 	
 }

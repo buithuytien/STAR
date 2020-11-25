@@ -6,6 +6,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.io.*;
 import java.util.*;
+
+import CRUD.PeopleManager;
 import util.*;
 
 
@@ -14,14 +16,20 @@ import enums.*;
 import entity.*;
 import util.*;
 
+/**
+ * class containing main method, prompting for user login details.
+ * @author BUITT
+ *
+ */
+
 public class StarsLogin {
 
-	public static void main(String args[]){
+	public static void main(String args[]) {
 		String userId,password;
 		char userType;
 		int menuOption = 0;
 		PeopleManager people = new PeopleManager();
-		
+		DBObj dbo = new DBObj();
 		LocalDateTime nowx = LocalDateTime.now();  
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");  
         String formatDateTime = nowx.format(format);
@@ -73,30 +81,41 @@ public class StarsLogin {
 					/*
 					 * check access time
 					 */
-					Student stud = new Student(userId);
-					Date startTime = stud.getStartTime();
-					Date endTime = stud.getEndTime();
-					
+					Student stud;
 					try {
-						Calendar calendar1 = Calendar.getInstance();
-					    calendar1.setTime(startTime);
-					    calendar1.add(Calendar.DATE, 1);
+						stud = dbo.getStudentObj(userId);
+						Date startTime = stud.getStartTime();
+						Date endTime = stud.getEndTime();
+							
+						try {
+							Calendar calendar1 = Calendar.getInstance();
+						    calendar1.setTime(startTime);
+						    calendar1.add(Calendar.DATE, 1);
 
-					    Calendar calendar2 = Calendar.getInstance();
-					    calendar2.setTime(endTime);
-					    calendar2.add(Calendar.DATE, 1);
+						    Calendar calendar2 = Calendar.getInstance();
+						    calendar2.setTime(endTime);
+						    calendar2.add(Calendar.DATE, 1);
 
-					    Date d = new SimpleDateFormat("dd/mm/yyyy HH:mm:ss").parse(formatDateTime);
-					    Calendar calendar3 = Calendar.getInstance();
-					    calendar3.setTime(d);
-					    calendar3.add(Calendar.DATE, 1);
+						    Date d = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(formatDateTime);
+						    Calendar calendar3 = Calendar.getInstance();
+						    calendar3.setTime(d);
+						    calendar3.add(Calendar.DATE, 1);
 
-					    Date x = calendar3.getTime();
-					    if (x.after(calendar1.getTime()) && x.before(calendar2.getTime())) { //checks whether the current time is between start and end time.
-					        StudentApp.printStudentMenu(stud);
-					    }
-					} catch (ParseException e) {
-					    e.printStackTrace();
+						    Date x = calendar3.getTime();
+						    if (x.after(calendar1.getTime()) && x.before(calendar2.getTime())) { //checks whether the current time is between start and end time.
+						        StudentApp.printStudentMenu(stud);
+						    } else {
+						    	System.out.println("You are not authorised to access anything now.");
+						    }
+						} catch (ParseException e) {
+						    e.printStackTrace();
+						}
+					} catch (ParseException e1) {
+						System.out.println("Parsing Error!");
+						e1.printStackTrace();
+					} catch (ErrorException e1) {
+						System.out.println("File Error!");
+						e1.printStackTrace();
 					}
 					
 				}	

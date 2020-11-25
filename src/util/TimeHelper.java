@@ -1,6 +1,7 @@
 package util;
 
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,53 +10,51 @@ import java.util.Date;
 
 import enums.InstructionType;
 
+/**
+ * to get the date and time of student access period and class sessions
+ * @author BUITT
+ *
+ */
 public class TimeHelper {
-	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-	
+	/**
+	 * declare strings in a particular format
+	 */
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");	
 	public static final String TIME_FORMAT="HH:mm"; 
 	
+	/**
+	 * method to convert the string into Date object used in student access period
+	 * @param strDateTime
+	 * @return Date object of student access period, either start time or end time
+	 * @throws ParseException
+	 */
 	public static Date GetStudentDateTime(String strDateTime) throws ParseException {
 		// use to check student registration date time
 		Date temp = null;
 		temp = dateFormat.parse(strDateTime);
-//		 try {
-//			temp = dateFormat.parse(strDateTime);
-//		} catch (ParseException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println("ERROR: Incorrect date time format.");
-//		}
 		return temp;
 	}
 	
+	/**
+	 * method to convert the String of time in a day into LocalTime object used in class sessions' schedule
+	 * @param timeStr
+	 * @return
+	 * @throws DateTimeParseException
+	 */
 	public static LocalTime convertStringToTime (String timeStr) throws DateTimeParseException{
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
 		LocalTime t = null;
 		t = LocalTime.parse(timeStr, formatter);		
-//		try {
-//			t = LocalTime.parse(timeStr, formatter);			
-//		} catch (DateTimeParseException e) {
-//			e.printStackTrace();
-//			System.out.println("ERROR: Wrong time format");
-//		}
 		return t;
 	}
 	
 	/**
-	 * method to convert the time into a string
+	 * Method To Convert The Time Object Into A String
 	 * @param time
 	 * @return string of the time
 	 */
 	public static String convertTimeToString(LocalTime time) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
-		return time.format(formatter);
-		
-		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+		return time.format(formatter);		
 	}
-	
-//	public static void main(String[] args) {
-//		convertStringToTime("aa bb");
-//	}
-	
 }

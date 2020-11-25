@@ -10,77 +10,36 @@ import java.util.List;
 import entity.ClassType;
 import entity.Course;
 import entity.CourseIndex;
-import enums.InstructionCourseType;
+import entity.DBObj;
 import util.Database;
+
+/**
+ * class to handle Course and CourseIndex objects, 
+ * with methods to construct object from database and access object information
+ * @author BUITT
+ *
+ */
 
 public class CourseManager {
 	Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");	
+	Database db2 = new Database(System.getProperty("user.dir") + "\\src\\database\\");	
+	DBObj dbo = new DBObj(); //ADDED BY JY
 	
-//	public CourseManager();
-	
-	private CourseIndex getCourseIndexObj(String index) {
-		// assume course index exists in database
-		db.setFilename("Course");
-		// get course index object from a database		
-		String[] details = db.getCourseInfoRecord(index);
-		CourseIndex ci = new CourseIndex(index);
-		ci.setIndex(details[0]);
-		ci.setCourseCode(details[1]);
-		ci.setVacancy(Integer.parseInt(details[2]));
-		String[] elements1 = details[3].split(";");
-		List<String> list1 = Arrays.asList(elements1); 
-		ArrayList<String> regId = new ArrayList<String>(list1);
-		ci.setRegisterIDs(regId);
-		String[] elements2 = details[4].split(";");
-		List<String> list2 = Arrays.asList(elements2); 
-		ArrayList<String> waitId = new ArrayList<String>(list2);
-		ci.setWaitIDs(waitId);
-		ci.setGrpNum(Integer.parseInt(details[5]));
-		ci.setCourseType(details[6]);
-		ci.setGERType(details[7]);
-		ci.setIndexAU(Integer.parseInt(details[8]));
-		if (details.length > 9) {
-			ci.setClassList(details[9].split(";")); // sessions column
-		}
-		
-		return ci;
-	}
-	
-	public Course getCourseObj(String courseCode) {
-		// assume course code exists in database
-		db.setFilename("CourseInfo");
-		// get course index object from a database		
-		String[] details = db.getCourseInfoRecord(courseCode, "CourseInfo");
-		Course course = new Course(courseCode);
-		CourseIndex ci;
-		ArrayList<CourseIndex> courseIndexList = new ArrayList<CourseIndex>();	
-		
-		// construct list of course index
-		String[] indexString = details[1].split(";");
-		for(int i = 0; i < indexString.length; i++) {
-			ci = getCourseIndexObj(indexString[i]);
-			courseIndexList.add(ci);
-		}
-		
-		course.setCourseCode(details[0]);
-		course.setCourseIndexList(courseIndexList);
-		course.setSchoolCode(details[2]);		
-		
-		return course;
-	}
-	
-	public int editIndexVacancy(String index, int vacancy) {
+	/**
+	 * method to edit the vacancy of a course index number, and save to database file Course.csv
+	 * @param index
+	 * @param vacancy
+	 */
+	public void editIndexVacancy(String index, int vacancy) {
 		db.setFilename("Course");
 		int index_line = db.findCourseIndexRecord(index, "Course");
 		if(index_line < 0) { // course index not found
 			System.out.println("Course index not found in database. Please create one or try again!");
-			return -1;
+			return ;
 		} 
 		// if index exists, create a course index object, and edit vacancy, then save to file. If no, do nothing, return 0;
 		// course index found at line index_line
-		CourseIndex ci = getCourseIndexObj(index);
-		System.out.println("Current vacancy of index " + index + "is: " + ci.getVacancy());
-		System.out.println("Current number of registered students " + ci.getNumRegisteredIDs());
+		CourseIndex ci = dbo.getCourseObj(index); 
 		
 		ci.setVacancy(vacancy); // we will save this object to file
 		int updated_vacancy = ci.getVacancy();
@@ -89,12 +48,19 @@ public class CourseManager {
 			// update file here
 			db.updateFile(index_line, 2, String.valueOf(updated_vacancy)); // 2 is the position of vacancy in a row
 			System.out.println("Index " + index + "vacancy updated sucessfully to " + updated_vacancy);
-			return 1;
+			return;
 		} else {
 			System.out.println("Index " + index + "vacancy NOT updated");
-			return -1;
+			return ;
 		}
 	}
+	
+	/**
+	 * method to return index vacancy
+	 * by checking the database file Course.csv
+	 * @param index
+	 * @return int value of vacancy of a course index number
+	 */
 	
 	public int returnIndexVacancy(String index) {
 		db.setFilename("Course");
@@ -105,27 +71,29 @@ public class CourseManager {
 		} 
 		// if index exists, create a course index object, and edit vacancy, then save to file. If no, do nothing, return 0;
 		// course index found at line index_line
-		CourseIndex ci = getCourseIndexObj(index);
+		CourseIndex ci = dbo.getCourseObj(index); // ADDED BY JY
 		int vacancy = ci.getVacancy();
 		System.out.println("Index " + index + " has " + vacancy + " vacancies");
 		return vacancy;
 	}
 
-	
-	public void addIndex2ExistingCourse(CourseIndex ci) { // add a new course index to existing course 
-		// TODO: implement this
+	/**
+	 * method to add a new course index number to an existing course, and save to database
+	 * @param ci
+	 */
+	public void addIndex2ExistingCourse(CourseIndex ci) { // 
 		// return null means not created
 		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		DBObj dbo = new DBObj(); //ADDED BY JY
 		
 		// get string that saved to db
-		String[] stringCourseIndexDB = ci.toStringDB();
+		String[] stringCourseIndexDB = dbo.setCourseRow(ci); //ADDED BY JY
 		db.appendFile(stringCourseIndexDB, "Course");
 		
 		// add new index string to CourseInfo, update to file
 		db.setFilename("CourseInfo");		
 		int line = db.findRecord(ci.getCourseCode(), "CourseInfo", 0);		
 		if(line < 0) { //  course not created before
-//			String [] stringCourseInfoDB = {ci.getCourseCode(), ci.getIndex(), ""};
 			System.out.println("Course not created. Please try again");
 			return;
 		} 
@@ -133,46 +101,51 @@ public class CourseManager {
 		String [] stringCourseInfoDB = db.getRecord(ci.getCourseCode(), "CourseInfo", 0); //  find course code at column 0
 		stringCourseInfoDB[1] += ";" + ci.getIndex();
 		db.updateFile(line, 1, stringCourseInfoDB[1]);					
-		System.out.println("New course index " + ci.getIndex() + " created and saved to database");		
+		System.out.println("New course index " + ci.getIndex() + " created and saved to database with vacancy " + ci.getVacancy() + " and class schedule:");	
+		System.out.println(ci.toStringClassList());
 	}
 	
-	public void addNewCourse(Course course) { // add a new course index to existing course 
-		// TODO: implement this
+	/**
+	 * method to add a new course index to existing course, and save to database
+	 * @param course
+	 */	
+	public void addNewCourse(Course course) {
 		// return null means not created
 		Database db = new Database(System.getProperty("user.dir") + "\\src\\database\\");
+		
+		DBObj dbo = new DBObj(); //ADDED BY JY
 		
 		// get string that saved to db
 		ArrayList<CourseIndex> indices = course.getCourseIndexList();
 		db.setFilename("Course");	
 		for(int i = 0; i < indices.size(); i++ ) {
 			CourseIndex ci = indices.get(i);
-			String [] stringCourseIndexDB = ci.toStringDB();
+			String [] stringCourseIndexDB = dbo.setCourseRow(ci); 
 			db.appendFile(stringCourseIndexDB, "Course");			
 		}
 		
 		// append new line to CourseInfo, update to file
 		db.setFilename("CourseInfo");	
-		db.appendFile(course.toStringDB(), "CourseInfo");
+		db.appendFile(dbo.setCourseInfoRow(course), "CourseInfo");
 		
-		System.out.println("New course " + course.getCourseCode() + " created and saved to database");		
+		System.out.println("New course " + course.getCourseCode() + " created and saved to database with index numbers: ");
+		System.out.println("Index | Vacancy | Schedule");
+		System.out.println("-------------------------------");
+		for(int i = 0; i < indices.size(); i++) {
+			System.out.print(indices.get(i).getIndex() + ": ");
+			System.out.print(indices.get(i).getVacancy() + "      ");
+			System.out.println(indices.get(i).toStringClassList());
+		}
 	}
 	
+	/**
+	 * method to update courseCode of an existing course, and save information to database
+	 * @param oldCourseCode
+	 * @param newCourseCode
+	 * @return
+	 */
 	
-	
-	
-	
-	public String removeCourseIndex() {
-		// only allowed if no students has registerred
-		return null;
-		
-	}
-	
-	public int updateCourseCode(String oldCourseCode, String newCourseCode) { // String course_code. change info in 2 database
-		/*/ TODO
-		 * get all records from Course.csv, update
-		 * get all records from CourseInfo.csv, only 1 line, update.
-		 */
-		// from CourseInfo.csv
+	public int updateCourseCode(String oldCourseCode, String newCourseCode) {
 		db.setFilename("CourseInfo");
 		int line1 = db.findRecord(oldCourseCode, "CourseInfo");
 		if(line1 < 0) { // not found
@@ -189,8 +162,16 @@ public class CourseManager {
 		for(int i = 0; i < line2.length; i++) {
 			db.updateFile(line2[i], 1, newCourseCode);
 		}
+		System.out.println("Course code " + oldCourseCode + " updated to " + newCourseCode);
 		return 1;		
 	}
+	
+	/**
+	 * method to update school code of an existing course
+	 * @param oldCourseCode
+	 * @param newSchoolCode
+	 * @return
+	 */
 	
 	public int updateCourseSchool(String oldCourseCode, String newSchoolCode) {
 		// from CourseInfo.csv
@@ -200,27 +181,43 @@ public class CourseManager {
 			return -1;
 		}
 		db.updateFile(line1, 2, newSchoolCode);
+		System.out.println("Hosting school of course " + oldCourseCode + " updated to: " + newSchoolCode);
 		return 1;		
 	}
 	
-	/*/
-	 *  PRINT STUDENT LIST METHODS
+	/**
+	 * method to print out list of students registered to a course index
+	 * @param index
 	 */
-	public int printStdByIndex(String index) {
+	public void printStdByIndex(String index) {
 		db.setFilename("Course");
+		db2.setFilename("Users");
 		String[] indexInfo = db.getRecord(index, "Course", 0);
 		if(indexInfo == null || indexInfo.length == 0) {
-			return -1; // course index not found
+			return ;
 		}
-		String[] stdList = indexInfo[3].split(";");
-		//print
-		System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
-		for(int i = 0; i < stdList.length; i++) {
-			System.out.println(stdList[i]);
-		}		
-		return 1; //  record found
+		
+		if(!indexInfo[3].equals("")) {
+			String[] stdList = indexInfo[3].split(";");
+			System.out.println("List of " + stdList.length + " students sucessfully registered to index " + index + ":");
+			System.out.println("Name      | Gender      | Nationality");
+			System.out.println("-------------------------------------");
+			for(int i = 0; i < stdList.length; i++) {
+				String[] stdRecord = db2.getUserRecord(stdList[i]);
+				System.out.println(stdRecord[1] + "   | " + stdRecord[5] + "       | " + stdRecord[6]);
+			}	
+		} else {
+			System.out.println("0 student registered to index " + index); 
+		}			
+		System.out.println("");
+		return ; //  record found
 	}
 	
+	/**
+	 * method to print out list of students registered to a course,
+	 * by printing the list of students registered to each of the course's index numbers
+	 * @param index
+	 */
 	public int printStdByCourse(String courseCode) {
 		db.setFilename("CourseInfo");
 		String[] CourseInfo = db.getRecord(courseCode, "CourseInfo", 0);		
@@ -232,12 +229,16 @@ public class CourseManager {
 		//print
 		System.out.println("List of students sucessfully registered to course " + courseCode + ":");
 		for(int i = 0; i < indices.length; i++) {
-			System.out.println(printStdByIndex(indices[i]));
+			printStdByIndex(indices[i]);
 		}		
 		return 1; //  record found
 	}
 	
-	// check if course code or school code exist
+	/**
+	 * method check if the course code matches any record in the database file Course.csv
+	 * @param index
+	 * @return True or False
+	 */
 	
 	public boolean checkCourseCodeExist(String courseCode) {
 		int line = db.findRecord(courseCode, "Course", 1); // find course code existence at Course.csv
@@ -247,6 +248,11 @@ public class CourseManager {
 		return false;
 	}
 	
+	/**
+	 * method to check if the course index number matches any record in the database file Course.csv
+	 * @param index
+	 * @return True or False
+	 */
 	public boolean checkCourseIndexExist(String index) {
 		int line = db.findRecord(index, "Course", 0); // find index code existence at Course.csv
 		if(line > 0) {

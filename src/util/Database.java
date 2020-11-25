@@ -7,28 +7,41 @@ import java.io.BufferedReader; // To allow us to read from csv
 import java.io.FileReader; // To allow us to read from csv
 import java.util.*;  
 
+/**
+ * Class to handle database files
+ * @author BUITT
+ *
+ */
 public class Database {
+
+	/**
+	 * method to declare strings
+	 */
 	private String filepath;
 	private String filename;
 	private FileWriter pw;
 	
-//	public Database (String filename) {
-//		this.filepath = System.getProperty("user.dir") + "\\database";
-//		this.filename = filename;
-//	}
-	
+	/**
+	 * Constructor
+	 * @param filepath
+	 */
 	public Database (String filepath) {
 		this.filepath = filepath;
 		this.filename = "";
 	}
 	
-	public Database (String filepath, String filename) {
-		this.filepath = filepath;
-		this.filename = filename; // WITHOUT the .csv
-	}
-
+	/**
+	 * set the filename without extension that this object will handle
+	 * @param filename
+	 */
+	public void setFilename(String filename) {this.filename = filename;} 
 	
-	public void appendFile(String[] rows, String filename) { // ADDED BY THUYTIEN, OVERLOAD THE PREVIOUS appendFile
+	/**
+	 * method to append one row to an existing file
+	 * @param rows: array of String to append to file, each element of array will be saved into one separate cell
+	 * @param filename:
+	 */
+	public void appendFile(String[] rows, String filename) {
 		try {
 			 // This allows us to append to the csv file without overwriting it
 			this.filename = filename;
@@ -52,11 +65,14 @@ public class Database {
 		}		
 	}
 	
-	public void appendFile(String[] rows) { 
-		appendFile(rows, this.filename);
-	}
-	
-	public void updateFile(int i, int j, String updateString){ // WROTE BY YIKSIANG
+	/**
+	 * method to edit the cell at row i, column j in this object's file name
+	 * row number and column number count starts from 0
+	 * @param i
+	 * @param j
+	 * @param updateString
+	 */
+	public void updateFile(int i, int j, String updateString){
 		try {
 			// First we read in the whole file first
 			BufferedReader br = new BufferedReader(new FileReader(this.filepath + this.filename + ".csv"));
@@ -66,22 +82,18 @@ public class Database {
 			String newLine;
 			String joined;
 			while ((newLine = br.readLine()) != null) {
-				//System.out.println(newLine);
 				lines.add(newLine);
 			}
 			
 			// if i > number of rows in file, throw an error
 			if(i > lines.size() - 1) { //  error handling
 				System.out.println("row or column to edit exceeds number of current rows in file");
-//				return;
 			}
 			if(j > lines.size() - 1) { //  error handling
 				System.out.println("row or column to edit exceeds number of current rows in file");
-//				return;
 			}
 			
 			// After reading we retrieve the row and column that we want to change
-			// System.out.println(lines.get(i));
 			data = lines.get(i).split(","); // So if you are storing multiple items in a single column do not use comma to separate them!
 			data[j] = updateString;
 			joined = String.join(",", data);
@@ -92,18 +104,22 @@ public class Database {
 			FileWriter writer = new FileWriter(this.filepath + this.filename + ".csv");
 			for (int k = 0; k < lines.size();k++) {
 				data = lines.get(k).split(",");
-				this.appendFile(data);
+				this.appendFile(data, this.filename);
 			}
-			
-//			writer.flush();
-//			writer.close();
 		}catch (IOException e) {
 			System.out.println("An error occurred.");
 			e.printStackTrace();
 		}
 	}
 	
-	public String[] getRecord(String id, String filename, int colNum) {  // ADDED BY THUYTIEN
+	/**
+	 * get record where its entry at the specified column matches the provided id
+	 * @param id
+	 * @param filename
+	 * @param colNum
+	 * @return the record of the whole matching row if found, null if not found
+	 */
+	public String[] getRecord(String id, String filename, int colNum) { 
 		// find record in any file name at column number colNum; only return the first row found.
 		this.filename = filename;
 		String[] data;
@@ -126,7 +142,37 @@ public class Database {
 		return new String[0];
 	}
 	
-	public int findRecord(String id, String filename, int colNum) {   // ADDED BY THUYTIEN
+	/**
+	 * Print list of students with name and ID and access period from database
+	 */
+	public void printStudentDB() {
+		this.filename = "Users";
+		String[] data;
+		String row;
+		String path_to_csv = this.filepath + this.filename + ".csv";
+		
+		try {
+			BufferedReader csvReader = new BufferedReader(new FileReader(path_to_csv));
+			while ((row = csvReader.readLine()) != null) {
+			    data = row.split(",");
+			    if (data[0].equals("S")) {
+			    	System.out.println(data[1] + "  " + data[2] + "  " + data[10] + "   " + data[11]);
+			    }
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	/**
+	 * get the first row number of the record where its entry at the specified matches the provided String
+	 * @param id
+	 * @param filename
+	 * @param colNum
+	 * @return row number of the matching record if found, null if not found
+	 */
+	public int findRecord(String id, String filename, int colNum) {
 		// find record in any file name at column number colNum; only return the first row found.
 		int i = 0;
 		this.filename = filename;
@@ -147,22 +193,29 @@ public class Database {
 			System.out.println("File Error.");
 			e.printStackTrace();
 			}
-//		System.out.println("Course Index not found");
 		return -1;
 	}
 	
-	public int findRecord(String id, String filename) {  // ADDED BY THUYTIEN
+	/**
+	 * get the first row number of the record where its entry at the column 0 matches the provided String
+	 * @param id
+	 * @param filename
+	 * @return row number of the matching record if found, null if not found
+	 */
+	public int findRecord(String id, String filename) {
 		// find record in any file name; only return the first row found.
 		int i = findRecord(id, filename, 0); // return
 		return i;
 	}
 	
-	public int findRecord(String id) {  // ADDED BY THUYTIEN
-		int i = findRecord(id, this.filename, 0); // return
-		return i;
-	}
-	
-	public int[] findAllRecord(String id, int colNum, String filename) {  // ADDED BY THUYTIEN
+	/**
+	 * get all row numbers of the records where their individual entry at the specified matches the provided String
+	 * @param id
+	 * @param colNum
+	 * @param filename
+	 * @return array row number of the matching records, null if not found
+	 */
+	public int[] findAllRecord(String id, int colNum, String filename) {
 		// find record in any file name at column number colNum; only return the first row found.
 		int[] arrRow; // return this
 		String arrRowString = ""; // this will grow
@@ -199,11 +252,13 @@ public class Database {
 		return null;
 	}
 	
-	public int[] findAllRecord(String id, int colNum) {   // ADDED BY THUYTIEN
-		return findAllRecord(id, colNum, this.filename);
-	}
-	
-	public boolean matchUserRecord(String userID, String password) {  
+	/**
+	 * check if an user ID (matric number) exists in Users.csv
+	 * @param userID
+	 * @param password
+	 * @return True or False
+	 */
+	public boolean matchUserRecord(String userID, String password) {
 		filename = "Users";
 		String[] data = new String[12];
 		try {
@@ -231,7 +286,12 @@ public class Database {
 		return false;
 	}
 	
-	public String[] getUserRecord(String userID) {
+	/**
+	 * get record of the specified user if their ID exists in Users.csv
+	 * @param userID
+	 * @return records of the user as array of String
+	 */
+	public String[] getUserRecord(String userID) { 
 		filename = "Users";
 		String[] data = new String[12];
 		try {
@@ -241,7 +301,7 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[2].equals(userID)) {
-			    	System.out.println("User Found");
+			    	//System.out.println("User Record Retrieved.");
 			    	return data;
 			    }
 			}
@@ -249,10 +309,14 @@ public class Database {
 			System.out.println("File Error.");
 			e.printStackTrace();
 			}
-		System.out.println("User not found");
+//		System.out.println("User not found, Record not retrieved.");
 		return new String[0];
 	}
 	
+	/**
+	 * create Users.csv file with necessary column headers if the file is not existed
+	 * @param filename
+	 */
 	public void CreateUserFile(String filename) {
 		this.filename = "Users";
 		try {
@@ -287,7 +351,6 @@ public class Database {
 				pw.flush();
 			} 
 			else {
-				System.out.println("File already exists.");
 				pw = new FileWriter(this.filepath + this.filename + ".csv",true); // This is to prepare to write to the file
 				pw.flush();
 			}
@@ -300,7 +363,10 @@ public class Database {
 		}
 	}
 	
-	// ADJUSTED BY THUYTIEN
+	/**
+	 * create Course.csv file with necessary columns headers if the file has not existed
+	 * @param filename
+	 */
 	public void CreateCourseFile(String filename) { 
 		this.filename = "Course";
 		try {
@@ -326,17 +392,15 @@ public class Database {
 				pw.append(",");
 				pw.append("AUs");
 				pw.append(",");
-				pw.append("Sessions"); // class info, eg: LEC MONDAY 10:00 13:00 LT12;TUT MONDAY 9:00 10:00 TR101 // ADDED BY THUYTIEN
+				pw.append("Sessions"); // class info, eg: LEC MONDAY 10:00 13:00 LT12;TUT MONDAY 9:00 10:00 TR101
 				pw.append("\n");
 				pw.flush();
 			} 
 			else {
-				System.out.println("File already exists.");
+				//System.out.println("File already exists.");
 				pw = new FileWriter(this.filepath + this.filename + ".csv",true); // This is to prepare to write to the file
 				pw.flush();
 			}
-
-			
 		} 
 		catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -345,9 +409,12 @@ public class Database {
 	}
 	
 	
-	
-	public String[] getCourseInfoRecord(String course_index, String filename) {
-		this.filename = filename;
+	/**
+	 * get record of the specified course index if the index number exists in Course.csv
+	 * @param course_index
+	 * @return record of the specified course index as an array of String
+	 */
+	public String[] getCourseInfoRecord(String course_index) {
 		String[] data;
 		try {
 			String row;
@@ -356,7 +423,6 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[0].equals(course_index)) {
-			    	System.out.println("Course Index Found");
 			    	return data;
 			    }
 			}
@@ -368,12 +434,12 @@ public class Database {
 		return new String[0];
 	}
 	
-	public String[] getCourseInfoRecord(String course_index) {
-		String [] temp = getCourseInfoRecord(course_index, "Course");
-		return temp;
-	}
-	
-	public boolean matchCourseInfoRecord(String course_index) {
+	/**
+	 * check if a course index exists in Course.csv file
+	 * @param course_index
+	 * @return True or False
+	 */
+	public boolean matchCourseInfoRecord(String course_index) { //USED BY JY
 		this.filename = "Course";
 		String[] data;
 		try {
@@ -383,24 +449,28 @@ public class Database {
 			while (row  != null) {
 			    data = row.split(",");
 			    if (data.length == 0) {
-			    	break;
+			    	return false;
 			    }
 			    if (data[0].equals(course_index)) {
-			    	System.out.println("Course Index Found");
 			    	return true;
 			    }
 			    row = csvReader.readLine();
 			}
-			System.out.println("Course Index Found");
-			return false;
-		} catch(IOException e) {
+		} catch(IOException e) 
+		{
 			System.out.println("File Error.");
 			e.printStackTrace();
-			}
-		System.out.println("Course Index Found");
+		}
+		System.out.println("Course Index Not Found!!!");
 		return false;
 	}
 	
+	/**
+	 * get the row number of the record whose entry in column 0 matches the provided course index number
+	 * @param course_index
+	 * @param filename
+	 * @return the row number of the matching entry
+	 */
 	public int findCourseIndexRecord(String course_index, String filename) {
 		// fine line number of course_index or course. -1 means not found.
 		// eg. findCourseIndexRecord("10001", "Course") OR findCourseIndexRecord("AB1001", "CourseInfo") 
@@ -414,7 +484,6 @@ public class Database {
 			while ((row = csvReader.readLine()) != null) {
 			    data = row.split(",");
 			    if (data[0].equals(course_index)) {
-//			    	System.out.println("Course Index Found");
 			    	return i;
 			    }
 			    i++;
@@ -427,135 +496,12 @@ public class Database {
 		return -1;
 	}
 	
-	public int findCourseIndexRecord(String course_index) {
-		// fine line number of course_index or course. -1 means not found.
-		// eg. findCourseIndexRecord("10001", "Course") OR findCourseIndexRecord("AB1001", "CourseInfo") 
-		int temp = findCourseIndexRecord(course_index, "Course");
-		return temp;
-	}
-	
-	public void CreateCourseIndexFile(String filename) {
-		this.filename = "IndexInfo";
-		try {
-			File myObj = new File(this.filepath + filename + ".csv");
-			if (myObj.createNewFile()) {
-				System.out.println("File created: " + myObj.getName());
-				pw = new FileWriter(this.filepath + this.filename + ".csv",true); // This is to prepare to write to the file
-				pw.append("Course Index");
-				pw.append(",");
-				pw.append("Course Class Type");
-				pw.append(",");
-				pw.append("Session");  // TODO: remove//
-				pw.append(",");
-				pw.append("Time");
-				pw.append(",");
-				pw.append("Venue");
-				pw.append(",");
-				pw.append("Remarks");
-				pw.append("\n");
-				pw.flush();
-			} 
-			else {
-				System.out.println("File already exists.");
-				pw = new FileWriter(this.filepath + this.filename + ".csv",true); // This is to prepare to write to the file
-				pw.flush();
-			}
-
-			
-		} 
-		catch (IOException e) {
-			System.out.println("An error occurred.");
-			e.printStackTrace();
-		}
-	}
-	
-	public String[] getCourseIndexRecord(String course_index, String class_type, String session) {
-		filename = "IndexInfo";
-		String[] data = new String[5];
-		try {
-			String row;
-			String path_to_csv = this.filepath + this.filename + ".csv";
-			BufferedReader csvReader = new BufferedReader(new FileReader(path_to_csv));
-			while ((row = csvReader.readLine()) != null) {
-			    data = row.split(",");
-			    if ((data[0].equals(course_index)) && (data[1].equals(class_type)) && (data[2].equals(session)) ) {
-			    	System.out.println("Course Index, Session and  Found");
-			    	return data;
-			    }
-			}
-		} catch(IOException e) {
-			System.out.println("File Error.");
-			e.printStackTrace();
-			}
-		System.out.println("Course Index, Session and  Found");
-		return new String[0];
-	}
-	
-	public boolean matchCourseIndexRecord(String course_index, String class_type, String session) {
-		filename = "IndexInfo";
-		String[] data = new String[5];
-		try {
-			String path_to_csv = this.filepath + this.filename + ".csv";
-			BufferedReader csvReader = new BufferedReader(new FileReader(path_to_csv));
-			String row = csvReader.readLine();
-			while (row  != null) {
-			    data = row.split(",");
-			    if (data.length == 0) {
-			    	break;
-			    }
-			    if ((data[0].equals(course_index)) && (data[1].equals(class_type)) && (data[2].equals(session))) {
-			    	System.out.println("Course Index Found");
-			    	return true;
-			    }
-			    row = csvReader.readLine();
-			}
-			System.out.println("Course Index, Session and  Found");
-			return false;
-		} catch(IOException e) {
-			System.out.println("File Error.");
-			e.printStackTrace();
-			}
-		System.out.println("Course Index, Session and  Found");
-		return false;
-	}
-	
-	
-	// jy add
-	public void setFilename(String filename) {this.filename = filename;}
-	
-	public void updateCourseInfo(String index, String[] str) { //to update the whole row
-		// codes to flush the updated info into excel file
-		filename = "Course";
-		
-		try {
-			String path_to_csv = this.filepath + this.filename + ".csv";
-			BufferedReader csvReader = new BufferedReader(new FileReader(path_to_csv));
-			String row = csvReader.readLine();
-			String[] data;
-			while (row  != null) {
-			    data = row.split(",");
-			    if (data.length == 0) { //no rows inside
-			    	break;
-			    }
-			    if (data[0] == index) {
-			    	for (int i = 0; i< data.length; i++) 
-			    	{
-			    	pw.write(data[i]);
-			    	pw.append(",");
-			    	}
-			    	pw.flush();
-			    	
-			    	break;
-			    }
-			    row = csvReader.readLine();
-			}			
-		} catch(IOException e) {
-			System.out.println("Unable to edit content.");
-			e.printStackTrace();
-			}
-		System.out.println("Not Found");
-	}
-	
+	/**
+	 * get all index numbers in Course.csv file if the specified item is found in the specified column of the index number's record
+	 * @param item
+	 * @param loc
+	 * @return ArrayList of matching index numbers
+	 */
 	public ArrayList<String> returnIndexRecord(String item, int loc) { //eg. matric no. and regid location
 		filename = "Course";
 		String[] data;
